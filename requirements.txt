@@ -1,0 +1,12 @@
+# Breakdown of the work to be done
+
+# Main page - new user/logged out user
+
+# Main page - logged in user
+
+# Profile page
+
+# History of the workouts
+
+# Comparsion with athletes
+

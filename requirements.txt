@@ -10,3 +10,9 @@
 
 # Comparsion with athletes
 
+# Create plan  
+#    Days of the week
+#    Comfortable and best paces on different distances
+#    TBD 
+
+

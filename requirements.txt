@@ -1,6 +1,8 @@
 # Breakdown of the work to be done
 
 # Main page - new user/logged out user
+#   Registration and login with social networks
+#   Registration and login without social networks
 
 # Main page - logged in user
 
@@ -13,6 +15,7 @@
 # Create plan  
 #    Days of the week
 #    Comfortable and best paces on different distances
-#    TBD 
+#    Distances run in the week       
+# 
 
 

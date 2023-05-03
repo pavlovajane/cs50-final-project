@@ -6,19 +6,19 @@
 
 # Main page - logged in user
 
-# Profile page
+- Profile page
 
-# History of the workouts
+- History of the workouts
 
-# Comparsion with athletes from dataset
-#   Probability to run under time based on your schedule 
+- Comparsion with athletes from dataset
+-- Probability to run under time based on your schedule 
 
-# Create plan  
-#    Days of the week
-#    Comfortable and best paces on different distances
-#    Distances run in the week       
+- Create plan  
+-- Days of the week
+-- Comfortable and best paces on different distances
+-- Distances run in the week       
 
-# Track excersice 
-#  Record time, distance (metric/imperial), pace calculated (can choose metric/imperial)
-
+- Track excersice 
+-- Record time, distance (metric/imperial), pace calculated (can choose metric/imperial)
+-- Weather API to add weather at place, time
 

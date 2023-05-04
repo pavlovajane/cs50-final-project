@@ -1,3 +1,10 @@
+requests==2.21.0
+Flask==2.0.3
+oauthlib==3.0.1
+pyOpenSSL==19.0.0
+Flask-Login==0.4.1
+Flask-Session
+cs50
 # Breakdown of the work to be done
 
 # Main page - new user/logged out user
@@ -6,19 +13,19 @@
 
 # Main page - logged in user
 
-- Profile page
+# - Profile page
 
-- History of the workouts
+# - History of the workouts
 
-- Comparsion with athletes from dataset
--- Probability to run under time based on your schedule 
+# - Comparsion with athletes from dataset
+# -- Probability to run under time based on your schedule 
 
-- Create plan  
--- Days of the week
--- Comfortable and best paces on different distances
--- Distances run in the week       
+# - Create plan  
+# -- Days of the week
+# -- Comfortable and best paces on different distances
+# -- Distances run in the week       
 
-- Track excersice 
--- Record time, distance (metric/imperial), pace calculated (can choose metric/imperial)
--- Weather API to add weather at place, time
+# - Track excersice 
+# -- Record time, distance (metric/imperial), pace calculated (can choose metric/imperial)
+# -- Weather API to add weather at place, time
 

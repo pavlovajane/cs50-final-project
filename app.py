@@ -7,6 +7,20 @@ from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 import json
 
+
+# Third-party libraries
+from flask import url_for
+from flask_login import (
+    LoginManager,
+    current_user,
+    login_user,
+    logout_user,
+)
+from oauthlib.oauth2 import WebApplicationClient
+
+# internal imports
+from db import get_db
+from user import User
 from supportfunc import apology, login_required
 
 # Configure application
@@ -17,12 +31,14 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# Connect to sqlite database
-db = sqlite3.connect('marathoner.db')
+database = get_db("marathoner.db")
 
-# Make sure API key is set
-# if not os.environ.get("API_KEY"):
-#     raise RuntimeError("API_KEY not set")
+# Configuration of the OAuth with Google
+GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
+GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
+GOOGLE_DISCOVERY_URL = (
+    "https://accounts.google.com/.well-known/openid-configuration"
+)
 
 
 @app.after_request
@@ -58,7 +74,7 @@ def login():
             return apology("must provide password", 403)
 
         # Query database for username
-        rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+        rows = database.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):

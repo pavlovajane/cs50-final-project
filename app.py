@@ -7,45 +7,19 @@ from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 import json
 
-
-# Third-party libraries
-from flask import url_for
-from flask_login import (
-    LoginManager,
-    current_user,
-    login_user,
-    logout_user,
-)
-from oauthlib.oauth2 import WebApplicationClient
-
 # internal imports
-from user import User
 from supportfunc import apology, login_required
 
 # Configure application
 app = Flask(__name__)
-
-# User session management setup
-# https://flask-login.readthedocs.io/en/latest
-login_manager = LoginManager()
-login_manager.init_app(app)
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+# Connect to the database
 database = sqlite3.connect("marathoner.db")
-
-# Configuration of the OAuth with Google
-GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
-GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
-GOOGLE_DISCOVERY_URL = (
-    "https://accounts.google.com/.well-known/openid-configuration"
-)
-
-# OAuth 2 client setup
-client = WebApplicationClient(GOOGLE_CLIENT_ID)
 
 @app.after_request
 def after_request(response):
@@ -61,10 +35,6 @@ def index():
     """Show runs done for logged in user"""
     return apology("TODO")
 
-# Flask-Login helper to retrieve a user from our db
-@login_manager.user_loader
-def load_user(user_id):
-    return User.get(user_id)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

@@ -63,6 +63,7 @@ def login():
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
+        session["username"] = rows[0]["username"]
 
         # Redirect user to home page
         return redirect("/")
@@ -84,4 +85,45 @@ def logout():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
-    return apology("TODO")
+    
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+
+        # Ensure username was submitted
+        if not request.form.get("username"):
+            return apology("must provide username", 400)
+
+        # Ensure password was submitted
+        elif not request.form.get("password"):
+            return apology("must provide password", 400)
+
+        # Ensure password was confirmed
+        elif not request.form.get("confirmation"):
+            return apology("must confirm password", 400)
+
+        # Ensure confirmation matched password
+        elif not (request.form.get("password") == request.form.get("confirmation")):
+            return apology("Password and confirmation don't match", 400)
+
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        # Check if such username exists
+        if (len(database.execute("SELECT * FROM users WHERE username = ?", username)) != 0):
+            return apology("Username is taken", 400)
+
+        # Add user to the database
+        database.execute("INSERT INTO users (username, hash) VALUES (?, ?)", username, generate_password_hash(password))
+
+        # Query database for username
+        rows = database.execute("SELECT * FROM users WHERE username = ?", username)
+
+        # Remember which user has logged in
+        session["user_id"] = rows[0]["id"]
+
+        # Redirect user to home page
+        return redirect("/")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("register.html")

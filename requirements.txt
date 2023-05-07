@@ -1,10 +1,9 @@
 requests==2.21.0
 Flask==2.0.3
-oauthlib==3.0.1
 pyOpenSSL==19.0.0
 Flask-Login==0.4.1
 Flask-Session
-cs50
+
 # Breakdown of the work to be done
 
 # Main page - new user/logged out user
@@ -14,6 +13,7 @@ cs50
 # Main page - logged in user
 
 # - Profile page
+# Add password checks - with simbols, at least 10 lenght, with numbers
 
 # - History of the workouts
 

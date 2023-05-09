@@ -24,7 +24,7 @@ if not os.environ.get("API_KEY"):
     raise RuntimeError("API_KEY not set")
 
 # Connect to the database
-database = sqlite3.connect("marathoner.db")
+database = sqlite3.connect("marathoner.db", check_same_thread=False)
 
 @app.after_request
 def after_request(response):
@@ -60,7 +60,7 @@ def login():
             return apology("must provide password", 403)
 
         # Query database for username
-        rows = database.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+        rows = database.execute("SELECT * FROM users WHERE username = %s", request.form.get("username"))
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
@@ -114,14 +114,14 @@ def register():
         password = request.form.get("password")
 
         # Check if such username exists
-        if (len(database.execute("SELECT * FROM users WHERE username = ?", username)) != 0):
+        if (len(database.execute("SELECT * FROM users WHERE username = %s", username)) != 0):
             return apology("Username is taken", 400)
 
         # Add user to the database
-        database.execute("INSERT INTO users (username, hash) VALUES (?, ?)", username, generate_password_hash(password))
+        database.execute("INSERT INTO users (username, hash) VALUES (%s, %s)", username, generate_password_hash(password))
 
         # Query database for username
-        rows = database.execute("SELECT * FROM users WHERE username = ?", username)
+        rows = database.execute("SELECT * FROM users WHERE username = %s", username)
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]

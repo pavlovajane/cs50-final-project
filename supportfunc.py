@@ -33,3 +33,33 @@ def login_required(f):
             return redirect("/login")
         return f(*args, **kwargs)
     return decorated_function
+
+def weather(latitude, longitude):
+    """Look up weather summary for given coordinates"""
+
+    # Contact API
+    try:
+        api_key = os.environ.get("API_KEY")
+        url = f"https://forecast9.p.rapidapi.com/rapidapi/forecast/{latitude}/{longitude}/summary/"
+
+        headers = {
+	            "X-RapidAPI-Key": api_key,
+	            "X-RapidAPI-Host": "forecast9.p.rapidapi.com"
+                }
+
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+    except requests.RequestException:
+        return None
+
+    # Parse response
+    try:
+        quote = response.json()
+        return {
+            # TODO change to weather response
+            # "name": quote["companyName"],
+            # "price": float(quote["latestPrice"]),
+            # "symbol": quote["symbol"]
+        }
+    except (KeyError, TypeError, ValueError):
+        return None

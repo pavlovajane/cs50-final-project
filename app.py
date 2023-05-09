@@ -6,6 +6,7 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 import json
+import re
 
 # internal imports
 from supportfunc import apology, login_required
@@ -17,6 +18,10 @@ app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
+
+# Make sure API key is set
+if not os.environ.get("API_KEY"):
+    raise RuntimeError("API_KEY not set")
 
 # Connect to the database
 database = sqlite3.connect("marathoner.db")
@@ -127,3 +132,6 @@ def register():
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("register.html")
+
+if __name__ == "__main__":
+    app.run(ssl_context='adhoc')

@@ -45,3 +45,46 @@ table td {
     background-color: #f5f5f5;
     transition: color 2s ease-in-out, background-color 0.15s ease-in-out;
 }
+
+/* Tooltip for the registration */
+  
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltiptext {
+    position: absolute;
+    transform: translateY(-50%);
+    width: 100%; /* make the tooltip text as wide as the input field */
+    max-width: 300px; /* limit the maximum width of the tooltip text */
+    padding: 10px;
+    background-color: #555;
+    color: #fff;
+    border-radius: 6px;
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: left;
+    visibility: hidden;
+}
+
+.tooltiptext ul {
+    margin: 0;
+    padding: 0;
+    list-style:none;
+    text-align: left;
+    margin-top: 5px;
+    margin-left: 0;
+}
+
+.tooltiptext li {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+#passwordRegister:hover + .tooltiptext {
+    visibility: visible;
+}
+
+/* set the position of the input field to relative */
+#passwordRegister {
+    position: relative;
+}

@@ -107,11 +107,11 @@ def register():
             return apology("must confirm password", 400)
 
         # Ensure confirmation matched password
-        elif not (request.form.get("password") == request.form.get("confirmation")):
+        elif not (request.form.get("passwordRegister") == request.form.get("confirmationRegister")):
             return apology("Password and confirmation don't match", 400)
 
-        username = request.form.get("username")
-        password = request.form.get("password")
+        username = request.form.get("passwordRegister")
+        password = request.form.get("confirmationRegister")
 
         # Check if such username exists
         if (len(database.execute("SELECT * FROM users WHERE username = %s", username)) != 0):

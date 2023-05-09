@@ -1,20 +1,33 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Register
+Register
 {% endblock %}
 
 {% block main %}
-    <form action="/register" method="post">
-        <div class="mb-3">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="username" name="username" placeholder="Username" type="text">
+<form action="/register" method="post">
+    <div class="mb-3">
+        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="username" name="username"
+            placeholder="Username" type="text">
+    </div>
+
+    <div class="mb-3">
+        <input class="form-control mx-auto w-auto" id="passwordRegister" name="passwordRegister"
+                placeholder="Password" type="password" minlength="8" required>  
+        <span class="tooltiptext">Make sure your password is:
+                <ul class="list">
+                    <li>- minimum 8 characters</li>
+                    <li>- has at least one capital letter</li>
+                    <li>- has at least one digit</li>
+                    <li>- has at least one special character</li>
+                </ul>
+        </span>
         </div>
-        <div class="mb-3">
-            <input class="form-control mx-auto w-auto" id="password" name="password" placeholder="Password" type="password">
-        </div>
-        <div class="mb-3">
-            <input class="form-control mx-auto w-auto" id="confirmation" name="confirmation" placeholder="Confirm password" type="password">
-        </div>
-        <button class="btn btn-primary" type="submit">Register</button>
-    </form>
+    </div>
+    <div class="mb-3">
+        <input class="form-control mx-auto w-auto" id="confirmationRegister" name="confirmationRegister"
+            placeholder="Confirm password" type="password">
+    </div>
+    <button class="btn btn-primary" type="submit">Register</button>
+</form>
 {% endblock %}

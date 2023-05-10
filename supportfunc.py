@@ -1,6 +1,6 @@
 import os
 import requests
-import urllib.parse
+import re
 
 from flask import redirect, render_template, request, session
 from functools import wraps
@@ -63,3 +63,7 @@ def weather(latitude, longitude):
         }
     except (KeyError, TypeError, ValueError):
         return None
+    
+def check_passowrd_validity(password):
+    password_pattern = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
+    return re.match(password_pattern, password)

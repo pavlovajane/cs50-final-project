@@ -9,7 +9,7 @@ import json
 import re
 
 # internal imports
-from supportfunc import apology, login_required
+from supportfunc import apology, login_required, check_passowrd_validity
 
 # Configure application
 app = Flask(__name__)
@@ -99,16 +99,19 @@ def register():
             return apology("must provide username", 400)
 
         # Ensure password was submitted
-        elif not request.form.get("password"):
+        elif not request.form.get("passwordRegister"):
             return apology("must provide password", 400)
 
         # Ensure password was confirmed
-        elif not request.form.get("confirmation"):
+        elif not request.form.get("confirmationRegister"):
             return apology("must confirm password", 400)
 
         # Ensure confirmation matched password
         elif not (request.form.get("passwordRegister") == request.form.get("confirmationRegister")):
             return apology("Password and confirmation don't match", 400)
+        
+        elif check_passowrd_validity(request.form.get("passwordRegister")):
+            return apology("Password should be at least 8 letters, one digit, one capital letter and one special character", 400)
 
         username = request.form.get("passwordRegister")
         password = request.form.get("confirmationRegister")

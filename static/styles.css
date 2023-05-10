@@ -52,6 +52,7 @@ table td {
 .tooltiptext {
     position: absolute;
     transform: translateY(-50%);
+    left: 57%;
     width: 100%; /* make the tooltip text as wide as the input field */
     max-width: 300px; /* limit the maximum width of the tooltip text */
     padding: 10px;

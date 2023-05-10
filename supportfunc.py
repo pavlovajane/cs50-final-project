@@ -66,4 +66,9 @@ def weather(latitude, longitude):
     
 def check_passowrd_validity(password):
     password_pattern = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
-    return re.match(password_pattern, password)
+    match = re.match(password_pattern, password)
+    if match==None:
+        return False
+    else:
+        return True
+    

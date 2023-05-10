@@ -25,6 +25,7 @@ if not os.environ.get("API_KEY"):
 
 # Connect to the database
 database = sqlite3.connect("marathoner.db", check_same_thread=False)
+cursordb = database.cursor()
 
 @app.after_request
 def after_request(response):
@@ -60,7 +61,7 @@ def login():
             return apology("must provide password", 403)
 
         # Query database for username
-        rows = database.execute("SELECT * FROM users WHERE username = %s", request.form.get("username"))
+        rows = cursordb.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
@@ -110,21 +111,24 @@ def register():
         elif not (request.form.get("passwordRegister") == request.form.get("confirmationRegister")):
             return apology("Password and confirmation don't match", 400)
         
-        elif check_passowrd_validity(request.form.get("passwordRegister")):
+        elif not check_passowrd_validity(request.form.get("passwordRegister")):
             return apology("Password should be at least 8 letters, one digit, one capital letter and one special character", 400)
 
         username = request.form.get("passwordRegister")
         password = request.form.get("confirmationRegister")
 
         # Check if such username exists
-        if (len(database.execute("SELECT * FROM users WHERE username = %s", username)) != 0):
+
+        if ((cursordb.execute("SELECT * FROM users WHERE username = ?", (username,))).count() != 0):
             return apology("Username is taken", 400)
 
         # Add user to the database
-        database.execute("INSERT INTO users (username, hash) VALUES (%s, %s)", username, generate_password_hash(password))
+        cursordb.execute("INSERT INTO users (username, hash) VALUES (?, ?)", (username,), generate_password_hash(password))
+        database.commit()
+        # TODO: fix execution of queries
 
         # Query database for username
-        rows = database.execute("SELECT * FROM users WHERE username = %s", username)
+        rows = cursordb.execute("SELECT * FROM users WHERE username = ?", (username,))
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]

@@ -12,11 +12,11 @@ const checkPassword=(name)=>(event)=>{
 
     // If the input value is valid, set the input field's background color to green
     if (isValid) {
-      event.target.style.backgroundColor = '#90ee90';
+      event.target.style.backgroundColor = '#b8f5c8';
     }
     // Otherwise, set the input field's background color to red
     else {
-      event.target.style.backgroundColor = '#f08080';
+      event.target.style.backgroundColor = '#f5c9d1';
     }
   });
 };

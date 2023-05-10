@@ -62,14 +62,15 @@ def login():
 
         # Query database for username
         rows = cursordb.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+        user = rows.fetchone()
 
         # Ensure username exists and password is correct
-        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+        if user != None or not check_password_hash(user[0]["hash"], request.form.get("password")):
             return apology("invalid username and/or password", 403)
 
         # Remember which user has logged in
-        session["user_id"] = rows[0]["id"]
-        session["username"] = rows[0]["username"]
+        session["user_id"] = user[0]["id"]
+        session["username"] = user[0]["username"]
 
         # Redirect user to home page
         return redirect("/")
@@ -114,24 +115,24 @@ def register():
         elif not check_passowrd_validity(request.form.get("passwordRegister")):
             return apology("Password should be at least 8 letters, one digit, one capital letter and one special character", 400)
 
-        username = request.form.get("passwordRegister")
-        password = request.form.get("confirmationRegister")
+        username = request.form.get("username")
+        password = request.form.get("passwordRegister")
 
         # Check if such username exists
 
-        if ((cursordb.execute("SELECT * FROM users WHERE username = ?", (username,))).count() != 0):
+        if ((cursordb.execute("SELECT * FROM users WHERE username = ?", (username,))).rowcount != -1):
             return apology("Username is taken", 400)
 
         # Add user to the database
-        cursordb.execute("INSERT INTO users (username, hash) VALUES (?, ?)", (username,), generate_password_hash(password))
+        cursordb.execute("INSERT INTO users (username, hash) VALUES (?, ?)", (username, generate_password_hash(password),))
         database.commit()
         # TODO: fix execution of queries
 
         # Query database for username
-        rows = cursordb.execute("SELECT * FROM users WHERE username = ?", (username,))
-
+        rows = cursordb.execute("SELECT id, username FROM users WHERE username = ?", (username,))
+        user = rows.fetchone(); 
         # Remember which user has logged in
-        session["user_id"] = rows[0]["id"]
+        session["user_id"] = user[0]
 
         # Redirect user to home page
         return redirect("/")

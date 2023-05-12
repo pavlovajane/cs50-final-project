@@ -13,6 +13,8 @@ from supportfunc import apology, login_required, check_passowrd_validity
 
 # Configure application
 app = Flask(__name__)
+# Enable debug mode to allow on the fly updates (DISCLAIMER: this is an edu project - not for production)
+app.debug = True
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_PERMANENT"] = False
@@ -39,7 +41,8 @@ def after_request(response):
 @login_required
 def index():
     """Show runs done for logged in user"""
-    return apology("TODO")
+    # TODO: implement query for the runs and fix flash_message accrodingly
+    return render_template("layout.html", flash_message=False)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -61,16 +64,16 @@ def login():
             return apology("must provide password", 403)
 
         # Query database for username
-        rows = cursordb.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+        rows = cursordb.execute("SELECT * FROM users WHERE username = ?", (request.form.get("username"),))
         user = rows.fetchone()
 
         # Ensure username exists and password is correct
-        if user != None or not check_password_hash(user[0]["hash"], request.form.get("password")):
+        if user == None or not check_password_hash(user[2], request.form.get("password")):
             return apology("invalid username and/or password", 403)
 
         # Remember which user has logged in
-        session["user_id"] = user[0]["id"]
-        session["username"] = user[0]["username"]
+        session["user_id"] = user[0]
+        session["username"] = user[1]
 
         # Redirect user to home page
         return redirect("/")

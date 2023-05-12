@@ -68,6 +68,7 @@ flask_session/
 
 # VS Code
 .vscode/
+local.txt
 
 # Scrapy stuff:
 .scrapy

@@ -7,25 +7,25 @@ Flask-Session
 # Breakdown of the work to be done
 
 # Main page - new user/logged out user
-#   Registration and login with social networks
-#   Registration and login without social networks
 
 # Main page - logged in user
+# -- Show runs sorted by date
 
 # - Profile page
 # Add password checks - with simbols, at least 10 lenght, with numbers
 
-# - History of the workouts
-
 # - Comparsion with athletes from dataset
-# -- Probability to run under time based on your schedule 
+# -- 4weeks stats this runner
+# -- Comparison with other athelets
 
+
+# Plan is to be postponed
 # - Create plan  
 # -- Days of the week
 # -- Comfortable and best paces on different distances
 # -- Distances run in the week       
 
 # - Track excersice 
-# -- Record time, distance (metric/imperial), pace calculated (can choose metric/imperial)
-# -- Weather API to add weather at place, time
+# -- Record date, time, distance (metric/imperial), speed calculated (can choose metric/imperial)
+# -- Weather API to add weather at place, time, record in the json database
 

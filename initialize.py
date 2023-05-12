@@ -1,6 +1,6 @@
 # initialize and load data into marathon runs table from MarathonData.csv
 
-import csv, sqlite3, sys
+import csv, sqlite3, sys, os
 
 with open("MarathonData.csv") as csvfile:
     # connect to the database
@@ -15,29 +15,33 @@ with open("MarathonData.csv") as csvfile:
             athlete TEXT NOT NULL DEFAULT "anonymous runner",
             agecategory TEXT,
             km4week REAL NOT NULL,
-            speed4week REAL NOT NULL
+            speed4week REAL NOT NULL,
             crosstraining TEXT,
             marathontime REAL NOT NULL,
-            performancecategory CHARACTER(1)
+            performancecategory CHARACTER(1))
         """)
-    
-    result = cursordb.execute("SELECT name FROM sqlite_master")
-    result.fetchone()
+    database.commit()
 
-    if not "marathoners" in result.fetchone():
+    result = cursordb.execute("SELECT name FROM sqlite_master")
+    tables = result.fetchall()
+    newtuple = ("marathoners",)
+    if not newtuple in tables:
         # table hasn't created
         sys.exit(1)
 
     result = cursordb.execute("SELECT marathon FROM marathoners")
-    if not result.fetchone() is None:
+    entries = result.fetchone()
+
+    if not entries is None:
         # if table is not empty - delete all entries before loading csv
         cursordb.execute("DELETE FROM TABLE marathoners")
         database.commit()
 
     # load from file to database
     with open('MarathonData.csv', newline='') as f:
-        reader = csv.reader(f)
-        for row in reader:
+        csvreader = csv.reader(f)
+        next(csvreader)
+        for row in csvreader:
             # insert row in marathoners
             cursordb.execute("""
                 INSERT INTO marathoners 
@@ -50,6 +54,6 @@ with open("MarathonData.csv") as csvfile:
                     marathontime,
                     performancecategory) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                """,(row["Marathon"],row["Name"],row["Category"],row["km4week"],row["sp4week"],row["CrossTraining"],row["MarathonTime"],row["CATEGORY"],))           
+                """,(row[1],row[2],row[3],row[4],row[5],row[6],row[8],row[9],))           
     database.commit()
     database.close()

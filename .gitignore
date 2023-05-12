@@ -66,6 +66,9 @@ instance/
 flask_session/
 .webassets-cache
 
+# VS Code
+.vscode/
+
 # Scrapy stuff:
 .scrapy
 

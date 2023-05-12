@@ -10,7 +10,7 @@ with open("MarathonData.csv") as csvfile:
     # create table to load data for athletes 
     cursordb.execute("""
         CREATE TABLE IF NOT EXISTS marathoners (
-            id INTEGER NOT NULL,
+            id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
             marathon TEXT NOT NULL,
             athlete TEXT NOT NULL DEFAULT "anonymous runner",
             agecategory TEXT,

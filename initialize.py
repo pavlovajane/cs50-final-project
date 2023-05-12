@@ -8,7 +8,7 @@ with open("MarathonData.csv") as csvfile:
     cursordb = database.cursor()
     
     # create table to load data for athletes 
-    cursordb.execute(""""
+    cursordb.execute("""
         CREATE TABLE IF NOT EXISTS marathoners (
             id INTEGER NOT NULL,
             marathon TEXT NOT NULL,
@@ -35,5 +35,21 @@ with open("MarathonData.csv") as csvfile:
         database.commit()
 
     # load from file to database
-
+    with open('MarathonData.csv', newline='') as f:
+        reader = csv.reader(f)
+        for row in reader:
+            # insert row in marathoners
+            cursordb.execute("""
+                INSERT INTO marathoners 
+                    (marathon, 
+                    athlete,
+                    agecategory,
+                    km4week,
+                    speed4week,
+                    crosstraining,
+                    marathontime,
+                    performancecategory) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """,(row["Marathon"],row["Name"],row["Category"],row["km4week"],row["sp4week"],row["CrossTraining"],row["MarathonTime"],row["CATEGORY"],))           
+    database.commit()
     database.close()

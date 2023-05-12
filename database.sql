@@ -1,8 +1,8 @@
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
     username TEXT NOT NULL, hash TEXT NOT NULL);
 
-CREATE TABLE runs (
+CREATE TABLE IF NOT EXISTS runs (
     id INTEGER NOT NULL,
     rundate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     distance REAL NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE runs (
     FOREIGN KEY (user_id) REFERENCES users (id) 
 );
 
-CREATE TABLE marathoners (
+CREATE TABLE IF NOT EXISTS marathoners (
     id INTEGER NOT NULL,
     marathon TEXT NOT NULL,
     athlete TEXT NOT NULL DEFAULT "anonymous runner",
@@ -24,6 +24,6 @@ CREATE TABLE marathoners (
     crosstraining TEXT,
     marathontime REAL NOT NULL,
     performancecategory CHARACTER(1)
-)
+);
 
 CREATE INDEX user_id ON runs(user_id);

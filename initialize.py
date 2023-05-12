@@ -20,6 +20,20 @@ with open("MarathonData.csv") as csvfile:
             marathontime REAL NOT NULL,
             performancecategory CHARACTER(1))
         """)
+    
+    # create runs table if not exists
+    cursordb.execute("""
+        CREATE TABLE IF NOT EXISTS runs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+            rundate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            distance REAL NOT NULL,
+            runtime TEXT NOT NULL,
+            speed REAL NOT NULL,
+            weather TEXT,
+            notes TEXT,
+            PRIMARY KEY (id),
+            FOREIGN KEY (user_id) REFERENCES users (id))
+    """)
     database.commit()
 
     result = cursordb.execute("SELECT name FROM sqlite_master")

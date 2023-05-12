@@ -4,13 +4,13 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS runs (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    user_id INTEGER,
     rundate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     distance REAL NOT NULL,
     runtime TEXT NOT NULL,
     speed REAL NOT NULL,
     weather TEXT,
     notes TEXT,
-    PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users (id))
 );
 

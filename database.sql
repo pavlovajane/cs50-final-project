@@ -10,7 +10,6 @@ CREATE TABLE IF NOT EXISTS runs (
     runtime TEXT NOT NULL,
     speed REAL NOT NULL,
     weather TEXT,
-    notes TEXT,
     FOREIGN KEY (user_id) REFERENCES users (id))
 );
 

@@ -1,6 +1,7 @@
 import os
 import requests
 import re
+import json
 
 from flask import redirect, render_template, request, session
 from functools import wraps
@@ -71,4 +72,22 @@ def check_passowrd_validity(password):
         return False
     else:
         return True
-    
+
+def get_user_runs(userid, db):
+
+    """Show portfolio of stocks if share>0"""
+    runs = db.execute("""
+                SELECT 
+                r.rundate as date,
+                r.distance as distance,
+                r.runtimte as time,
+                r.speed as speed,
+                r.weather as weather,
+                FROM runs AS r
+                INNER JOIN users AS u ON u.id = r.user_id
+                WHERE r.user_id = ?
+                ORDER BY r.rundate
+                """, userid)
+
+    jsonstring = json.dumps(runs)
+    runs = json.loads(jsonstring)

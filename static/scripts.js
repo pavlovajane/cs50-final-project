@@ -21,19 +21,38 @@ const checkPassword=(name)=>(event)=>{
   });
 };
 
+const checkDistance=(name)=>(event)=>{
+  // only positive floats or integers
+  // const distanceRegex = /^[-+]?[0-9]+\.[0-9]+$/;
+  const distanceInput = document.getElementById("distance");
+  
+  distanceInput.addEventListener('input', function (event) {
+    let prevVal = "";
+    const isValid = Number(this.value)>=0;
+    if (isValid) {
+      prevVal = this.value;
+    } else {
+      this.value = prevVal;
+    }
+  });
+};
+
+
+google.maps.event.addDomListener(window, 'load', initialize);
+  function initialize() {
+
+    let input = document.getElementById('city');
+    let autocomplete = new google.maps.places.Autocomplete(input);
+    autocomplete.addListener('place_changed', function () {
+      let place = autocomplete.getPlace();
+      
+      $('#lat').val(place.geometry['location'].lat());
+      $('#long').val(place.geometry['location'].lng());
+
+  });
+
+}
+
 document.addEventListener("DOMContentLoaded", checkPassword("passwordRegister")); 
 document.addEventListener("DOMContentLoaded", checkPassword("confirmationRegister")); 
-
-const x = document.getElementById("demo");
-function getLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition);
-  } else {
-    x.innerHTML = "Geolocation is not supported by this browser.";
-  }
-}
-
-function showPosition(position) {
-  x.innerHTML = "Latitude: " + position.coords.latitude +
-  "<br>Longitude: " + position.coords.longitude;
-}
+document.addEventListener("DOMContentLoaded", checkDistance("distance"));

@@ -89,5 +89,5 @@ def get_user_runs(userid, db):
                 ORDER BY r.rundate
                 """, (userid,))
 
-    jsonstring = json.dumps(runs)
-    runs = json.loads(jsonstring)
+    jsonstring = json.dumps(list(runs))
+    return json.loads(jsonstring)

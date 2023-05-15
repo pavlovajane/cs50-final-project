@@ -44,7 +44,12 @@ def index():
     # TODO: implement query for the runs and fix flash_message accrodingly
     runs = get_user_runs(session["user_id"], cursordb)
 
-    return render_template("layout.html", flash_message=False, runs = runs)
+    flash_message = False
+    if len(runs) != 0:
+        # Runs are found/tracked
+        flash_message = True
+    
+    return render_template("layout.html", flash_message=flash_message, runs = runs)
 
 
 @app.route("/login", methods=["GET", "POST"])

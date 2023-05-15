@@ -9,7 +9,7 @@ import json
 import re
 
 # internal imports
-from supportfunc import apology, login_required, check_passowrd_validity, get_user_runs
+from supportfunctions import apology, login_required, check_passowrd_validity, get_user_runs
 
 # Configure application
 app = Flask(__name__)
@@ -41,7 +41,6 @@ def after_request(response):
 @login_required
 def index():
     """Show runs done for logged in user"""
-    # TODO: implement query for the runs and fix flash_message accrodingly
     runs = get_user_runs(session["user_id"], cursordb)
 
     flash_message = False
@@ -49,7 +48,7 @@ def index():
         # Runs are found/tracked
         flash_message = True
     
-    return render_template("layout.html", flash_message=flash_message, runs = runs)
+    return render_template("layout.html", flash_message = flash_message, runs = runs)
 
 
 @app.route("/login", methods=["GET", "POST"])

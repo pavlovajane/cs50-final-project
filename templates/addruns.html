@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Add a run
+{% endblock %}
+
+{% block main %}
+<form action="/addrun" method="post">
+    <div class="addruns">
+        <div class="mb-3">
+            <label for="date">Date:</label>
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="date" name="date"
+            type="date">
+        </div>
+        <div class="mb-3">
+            <label for="distance">Distance:</label>
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="distance" name="distance"
+            type="number">
+        </div>
+        <div class="mb-3">
+            <label for="time">Time:</label>
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="time" name="time"
+            type="text">
+        </div>
+        <div class="mb-3">
+            <label for="city">Your location:</label>
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="city" name="city"
+            type="text">
+        </div>
+        <button class="btn btn-primary mb-3" id="addrun" type="submit">Add run</button>
+    </div>
+</form>
+
+<div class="section">
+    <h1>Runs</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Distance</th>
+                <th>Time</th>
+                <th>Speed (Distance/Time)</th>
+                <th>Weather</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% block scripts %}
+            <script>
+                let btn = document.querySelector("addrun");
+                btn.addEventListener("click", async function () {
+                    // request runs from users'
+                    let response = await fetch('/search?q=' + input.value); 
+                    let shows = await response.json();
+                    // show runs in the table
+                    // $('#data').DataTable({
+                    //     ajax: '/api/data',
+                    //     columns: [
+                    //         { data: 'name' },
+                    //         { data: 'age', searchable: false },
+                    //         { data: 'address', orderable: false, searchable: false },
+                    //         { data: 'phone', orderable: false, searchable: false },
+                    //         { data: 'email' }
+                    //     ],
+                });
+            </script>
+            {% endblock %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

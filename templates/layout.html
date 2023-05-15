@@ -32,9 +32,9 @@
                 <div class="collapse navbar-collapse" id="navbar">
                     {% if session["user_id"] %}
                     <ul class="navbar-nav me-auto mt-2">
-                        <li class="nav-item"><a class="nav-link" href="/quote">Training plan</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/buy">Add run</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/sell">Compare</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/plan">Training plan</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/addrun">Add run</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/compare">Compare</a></li>
                     </ul>
                     <ul class="navbar-nav ms-auto mt-2">
                         <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
@@ -80,7 +80,7 @@
                                     <td>{{ run.distance }}</td>
                                     <td>{{ run.time }}</td>
                                     <td>{{ run.speed }}</td>
-                                    <td>{{ run.weather }}</td>
+                                    <td id="weather"></td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

@@ -150,5 +150,21 @@ def register():
     else:
         return render_template("register.html")
 
+@app.route("/addrun", methods=["GET", "POST"])
+@login_required
+def quote():
+    
+    if request.method == "POST":
+
+        # TODO: add adding a run and loading the current weather
+
+        if False:
+            return apology("TBD", 400)
+
+        return redirect("/addruns.html")
+    else:
+        # Request is sent via GET - open the quote form
+        return render_template("addruns.html")
+
 if __name__ == "__main__":
     app.run(ssl_context='adhoc')

@@ -77,17 +77,17 @@ def get_user_runs(userid, db):
 
     """Show portfolio of stocks if share>0"""
     runs = db.execute("""
-                SELECT 
+                SELECT
                 r.rundate as date,
                 r.distance as distance,
-                r.runtimte as time,
+                r.runtime as time,
                 r.speed as speed,
-                r.weather as weather,
+                r.weather as weather
                 FROM runs AS r
                 INNER JOIN users AS u ON u.id = r.user_id
                 WHERE r.user_id = ?
                 ORDER BY r.rundate
-                """, userid)
+                """, (userid,))
 
     jsonstring = json.dumps(runs)
     runs = json.loads(jsonstring)

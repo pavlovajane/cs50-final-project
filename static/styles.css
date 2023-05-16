@@ -5,6 +5,25 @@
     align-items: flex-end;
 }
 
+.addRunBtn {
+    height: 38px;
+    margin-bottom: 1rem!important;
+}
+
+.form-switch {
+    padding-left: 3em!important;
+}
+
+.distance-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.dropdown-toggle {
+    margin-left: 2px;
+}
+
 /* Size for brand */
 nav .navbar-brand
 {

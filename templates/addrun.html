@@ -9,27 +9,32 @@ Add a run
     <div class="addruns">
         <div class="mb-3">
             <label for="date">Date:</label>
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="date" name="date"
-            type="date">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="date" name="date" type="date">
         </div>
-        <div class="mb-3">
+        <div class="mb-3">         
             <label for="distance">Distance:</label>
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="distance" name="distance"
-            type="text">
+            <div class="distance-group">
+                <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="distance" name="distance" type="text">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                    <label class="form-check-label" for="flexSwitchCheckDefault" id="switchLabel">km</label>
+                </div>
+            </div>
         </div>
         <div class="mb-3">
             <label for="time">Time:</label>
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="time" name="time"
-            type="time" step="1">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="time" name="time" type="time"
+                step="1">
         </div>
         <div class="mb-3">
             <label for="city">Your location:</label>
-            <input autofocus class="form-control mx-auto w-auto" id="city" name="city"
-            type="text">
+            <input autofocus class="form-control mx-auto w-auto" id="city" name="city" type="text">
             <input type="hidden" name="lat">
             <input type="hidden" name="long">
         </div>
-        <button class="btn btn-primary mb-3" id="addrun" type="submit">Add run</button>
+        <div class="addRunBtn">
+            <button class="btn btn-primary mb-3" id="addrun" type="submit">Add run</button>
+        </div>
     </div>
 </form>
 
@@ -51,7 +56,7 @@ Add a run
                 //let btn = document.querySelector("addrun");
                 //btn.addEventListener("click", async function () {
                     // request runs from users'
-                    //let response = await fetch('/search?q=' + input.value); 
+                    //let response = await fetch('/search?q=' + input.value);
                     //let shows = await response.json();
                     // show runs in the table
                     // $('#data').DataTable({

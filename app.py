@@ -161,10 +161,10 @@ def quote():
         if False:
             return apology("TBD", 400)
 
-        return redirect("/addruns.html")
+        return redirect("/addrun.html")
     else:
         # Request is sent via GET - open the quote form
-        return render_template("addruns.html")
+        return render_template("addrun.html")
 
 if __name__ == "__main__":
     app.run(ssl_context='adhoc')

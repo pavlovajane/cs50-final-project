@@ -51,7 +51,21 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
   });
 
-}
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Your JavaScript code here
+  const switchInput = document.getElementById('flexSwitchCheckDefault');
+  const switchLabel = document.getElementById('switchLabel');
+
+  switchInput.addEventListener('click', function() {
+    if (switchInput.checked) {
+      switchLabel.textContent = 'mi';
+    } else {
+      switchLabel.textContent = 'km';
+    }
+  });
+});
 
 document.addEventListener("DOMContentLoaded", checkPassword("passwordRegister")); 
 document.addEventListener("DOMContentLoaded", checkPassword("confirmationRegister")); 

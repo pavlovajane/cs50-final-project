@@ -37,20 +37,23 @@ const checkDistance=(name)=>(event)=>{
   });
 };
 
+document.addEventListener('DOMContentLoaded', function () {
+  intializePlaces();
+});
 
-google.maps.event.addDomListener(window, 'load', initialize);
-  function initialize() {
+function intializePlaces() {
 
-    let input = document.getElementById('city');
-    let autocomplete = new google.maps.places.Autocomplete(input);
-    autocomplete.addListener('place_changed', function () {
-      let place = autocomplete.getPlace();
-      
-      $('#lat').val(place.geometry['location'].lat());
-      $('#long').val(place.geometry['location'].lng());
+  let input = document.getElementById('city');
+  let autocomplete = new google.maps.places.Autocomplete(input);
+  autocomplete.addListener('place_changed', function () {
+    let place = autocomplete.getPlace();
+
+    let lat = document.getElementById('lat');
+    lat.innerHTML = place.geometry['location'].lat();
+    let long = document.getElementById('lang'); 
+    long.innerHTML = place.geometry['location'].lng();
 
   });
-
 };
 
 document.addEventListener('DOMContentLoaded', function() {

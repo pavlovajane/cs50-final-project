@@ -157,11 +157,16 @@ def quote():
     if request.method == "POST":
 
         # TODO: add adding a run and loading the current weather
+        
+        # Ensure username was submitted
+        if not request.form.get("username"):
+            return apology("must provide username", 400)
 
         if False:
             return apology("TBD", 400)
 
-        return redirect("/addrun.html")
+         # Redirect user to home page
+        return redirect("/")
     else:
         # Request is sent via GET - open the quote form
         return render_template("addrun.html")

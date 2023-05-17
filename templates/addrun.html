@@ -29,49 +29,12 @@ Add a run
         <div class="mb-3">
             <label for="city">Your location:</label>
             <input autofocus class="form-control mx-auto w-auto" id="city" name="city" type="text">
-            <input type="hidden" name="lat">
-            <input type="hidden" name="long">
+            <input type="hidden" id="lat" name="lat">
+            <input type="hidden" id="lang" name="lang">
         </div>
         <div class="addRunBtn">
             <button class="btn btn-primary mb-3" id="addrun" type="submit">Add run</button>
         </div>
     </div>
 </form>
-
-<div class="section">
-    <h1>Runs</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Distance</th>
-                <th>Time</th>
-                <th>Speed (Distance/Time)</th>
-                <th>Weather</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% block scripts %}
-            <script>
-                //let btn = document.querySelector("addrun");
-                //btn.addEventListener("click", async function () {
-                    // request runs from users'
-                    //let response = await fetch('/search?q=' + input.value);
-                    //let shows = await response.json();
-                    // show runs in the table
-                    // $('#data').DataTable({
-                    //     ajax: '/api/data',
-                    //     columns: [
-                    //         { data: 'name' },
-                    //         { data: 'age', searchable: false },
-                    //         { data: 'address', orderable: false, searchable: false },
-                    //         { data: 'phone', orderable: false, searchable: false },
-                    //         { data: 'email' }
-                    //     ],
-                //});
-            </script>
-            {% endblock %}
-        </tbody>
-    </table>
-</div>
 {% endblock %}

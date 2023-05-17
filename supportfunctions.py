@@ -91,3 +91,9 @@ def get_user_runs(userid, db):
 
     jsonstring = json.dumps(list(runs))
     return json.loads(jsonstring)
+
+def convert_to_miles_per_h(kmh):
+    return kmh*1.609344
+
+def convert_to_fahrenheit(c):
+    return ((c*9/5) + 32)

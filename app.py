@@ -5,11 +5,11 @@ from flask import Flask, flash, redirect, render_template, request, session, jso
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
-import json
+import json, requests
 import re
 
 # internal imports
-from supportfunctions import apology, login_required, check_passowrd_validity, get_user_runs
+from supportfunctions import apology, login_required, check_passowrd_validity, get_user_runs, convert_to_miles_per_h, convert_to_fahrenheit
 
 # Configure application
 app = Flask(__name__)
@@ -21,9 +21,6 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# Make sure API key is set
-if not os.environ.get("API_KEY"):
-    raise RuntimeError("API_KEY not set")
 
 # Connect to the database
 database = sqlite3.connect("marathoner.db", check_same_thread=False)
@@ -158,14 +155,43 @@ def quote():
 
         # TODO: add adding a run and loading the current weather
         
-        # Ensure username was submitted
-        if not request.form.get("username"):
-            return apology("must provide username", 400)
+        # Ensure all mandatory fields are subbmitted
+        if not request.form.get("date"):
+            return apology("must provide date", 400)
+        else:
+            date = request.form.get("date")
+        
+        if not request.form.get("distance"):
+            return apology("must provide distance", 400)
+        else:
+            distance = request.form.get("distance")
+        
+        if not request.form.get("time"):
+            return apology("must provide time", 400)
+        else:
+            time = request.form.get("distance")
 
-        if False:
-            return apology("TBD", 400)
+        # read weather for latitude and langitude if city provided
+        if (request.form.get("lat") and request.form.get("lang")):
+            # request summary weather for the api
+            try:
+                lat = request.form.get("lat")
+                lang = request.form.get("lang")
 
-         # Redirect user to home page
+                url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lang}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&forecast_days=1&start_date={date}&end_date={date}&timezone=auto"
+                response = requests.get(url)
+                response.raise_for_status()
+                weather = response.json()
+            except requests.RequestException:
+                # can't load weather
+                weather = ""
+                pass
+        else:
+            weather = ""
+
+        # create a database entry 
+
+        # Redirect user to home page
         return redirect("/")
     else:
         # Request is sent via GET - open the quote form

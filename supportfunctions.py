@@ -1,7 +1,7 @@
 import os
 import requests
 import re
-import json
+from datetime import datetime
 
 from flask import redirect, render_template, request, session
 from functools import wraps
@@ -98,8 +98,19 @@ def get_user_runs(userid, db):
                 ORDER BY r.rundate
                 """, (userid,))
 
-    jsonstring = json.dumps(list(runs))
-    return json.loads(jsonstring)
+    runsdict = []
+    for row in runs:
+        dict = {
+            "date": row[0],
+            "distance": row[1],
+            "time": row[2],
+            "speed": row[3],
+            "city": row[4],
+            "weather": row[5]
+        }
+        runsdict.append(dict)
+
+    return runsdict
 
 def convert_to_mph(kmh):
     return kmh*1.609344
@@ -123,3 +134,5 @@ def get_seconds(time_str):
     hh, mm, ss = time_str.split(':')
     return int(hh) * 3600 + int(mm) * 60 + int(ss)
 
+def convert_to_date(datestr):
+    return datetime.strptime(datestr, "%Y-%m-%d").date()

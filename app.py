@@ -1,20 +1,23 @@
-import os
-
 import sqlite3
 from flask import Flask, flash, redirect, render_template, request, session, jsonify
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 import requests
+from datetime import date
 
 # internal imports
 from supportfunctions import apology, login_required, check_passowrd_validity, get_user_runs, \
-    convert_to_mph, convert_to_kmh, convert_to_fahrenheit, parse_weather, get_seconds
+    convert_to_mph, convert_to_kmh, convert_to_fahrenheit, parse_weather, get_seconds, convert_to_date
 
 # Configure application
 app = Flask(__name__)
+
 # Enable debug mode to allow on the fly updates (DISCLAIMER: this is an edu project - not for production)
 app.debug = True
+
+# Custom filter
+app.jinja_env.filters["convertdate"] = convert_to_date
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_PERMANENT"] = False
@@ -38,13 +41,14 @@ def after_request(response):
 def index():
     """Show runs done for logged in user"""
     runs = get_user_runs(session["user_id"], cursordb)
+    today = date.today()
 
     flash_message = False
     if len(runs) != 0:
         # Runs are found/tracked
         flash_message = True
     
-    return render_template("layout.html", flash_message = flash_message, runs = runs)
+    return render_template("layout.html", flash_message = flash_message, runs = runs, futuredate = today)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -93,6 +97,18 @@ def logout():
 
     # Redirect user to login form
     return redirect("/")
+
+@app.route("/profile", methods=["GET", "POST"])
+def profile():
+    # TODO: implement profile - let user choose btw imperical and metric
+
+    if request.method == "POST":
+        
+        # Redirect to index
+        return redirect("/")
+    
+    else:
+        return render_template("profile.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -204,7 +220,7 @@ def addrun():
         cursordb.execute("""
                         INSERT INTO runs (user_id, rundate, distance, runtime, speed, city, weather) 
                         VALUES (?, ?, ?, ?, ?, ?, ?)
-                        """,(session["user_id"], date, distance, time, speed, city, weather))
+                        """,(session["user_id"], date, round(distance,2), time, speed, city, weather))
         database.commit()
 
         # Redirect user to home page

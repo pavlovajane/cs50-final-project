@@ -41,6 +41,8 @@
                         <li class="nav-item"><a class="nav-link" href="/compare">Compare</a></li>
                     </ul>
                     <ul class="navbar-nav ms-auto mt-2">
+                        <li class="nav-link">Hello, {{ session["username"] }}</li>
+                        <li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
                         <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
                     </ul>
                     {% else %}
@@ -80,13 +82,13 @@
                             </thead>
                             <tbody>
                                 {% for run in runs %}
-                                <tr>
-                                    <td>{{ run[0] }}</td>
-                                    <td>{{ run[1] }}</td>
-                                    <td>{{ run[2] }}</td>
-                                    <td>{{ run[3] }}</td>
-                                    <td>{{ run[4] }}</td>
-                                    <td>{{ run[5] }}</td>
+                                <tr {% if run.date|convertdate > futuredate %} class="futuredate" {% endif %}>
+                                    <td>{{ run.date }}</td>
+                                    <td>{{ run.distance }}</td>
+                                    <td>{{ run.time}}</td>
+                                    <td>{{ run.speed }}</td>
+                                    <td>{{ run.city }}</td>
+                                    <td>{{ run.weather }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

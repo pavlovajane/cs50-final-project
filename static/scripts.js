@@ -67,8 +67,10 @@ document.addEventListener('DOMContentLoaded', function() {
   switchInput.addEventListener('click', function() {
     if (switchInput.checked) {
       switchLabel.textContent = 'mi';
+      switchInput.value = 'mi';
     } else {
       switchLabel.textContent = 'km';
+      switchInput.value = 'km';
     }
   });
 });

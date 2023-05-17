@@ -82,9 +82,14 @@ def get_user_runs(userid, db):
                 r.distance as distance,
                 r.runtime as time,
                 r.speed as speed,
+                CASE r.city
+                    WHEN ""
+                        THEN "N/A"
+                    ELSE r.city
+                END city,
                 CASE r.weather
                     WHEN ""
-                        THEN "No weather"
+                        THEN "N/A"
                     ELSE r.weather
                 END weather
                 FROM runs AS r

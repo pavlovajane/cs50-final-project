@@ -160,9 +160,15 @@ def addrun():
             return apology("must provide distance", 400)
         else:
             distance = int(request.form.get("distance"))
-            if request.form.get("switchLabel")=="mi":
-                distance = convert_to_kmh(distance)
-            
+            if request.form.get("flexSwitchCheckDefault")=="mi":
+                # convert to km if mi is chosen
+                distance = round(distance*1.60934,2)
+
+        if not request.form.get("city"):
+            city = ""
+        else:
+            city = request.form.get("city")
+
         if not request.form.get("time"):
             return apology("must provide time", 400)
         else:
@@ -196,9 +202,9 @@ def addrun():
         # Same for the temperatures - stored in Celsius, on user's settings converted into Farenheit
         
         cursordb.execute("""
-                        INSERT INTO runs (user_id, rundate, distance, runtime, speed, weather) 
-                        VALUES (?, ?, ?, ?, ?, ?)
-                        """,(session["user_id"], date, distance, time, speed, weather))
+                        INSERT INTO runs (user_id, rundate, distance, runtime, speed, city, weather) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?)
+                        """,(session["user_id"], date, distance, time, speed, city, weather))
         database.commit()
 
         # Redirect user to home page

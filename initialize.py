@@ -29,8 +29,8 @@ with open("MarathonData.csv") as csvfile:
             distance REAL NOT NULL,
             runtime TEXT NOT NULL,
             speed REAL NOT NULL,
+            city TEXT,
             weather TEXT,
-            notes TEXT,
             PRIMARY KEY (id),
             FOREIGN KEY (user_id) REFERENCES users (id))
     """)

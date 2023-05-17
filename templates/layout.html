@@ -74,17 +74,19 @@
                                     <th>Distance</th>
                                     <th>Time</th>
                                     <th>Speed (Distance/Time)</th>
+                                    <th>City/Place</th>
                                     <th>Weather</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for run in runs %}
                                 <tr>
-                                    <td>{{ run.date }}</td>
-                                    <td>{{ run.distance }}</td>
-                                    <td>{{ run.time }}</td>
-                                    <td>{{ run.speed }}</td>
-                                    <td>{{ run.weather }}</td>
+                                    <td>{{ run[0] }}</td>
+                                    <td>{{ run[1] }}</td>
+                                    <td>{{ run[2] }}</td>
+                                    <td>{{ run[3] }}</td>
+                                    <td>{{ run[4] }}</td>
+                                    <td>{{ run[5] }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

@@ -6,7 +6,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import requests
 from datetime import date
 
-# internal imports
+# Internal imports
 from supportfunctions import apology, login_required, check_passowrd_validity, get_user_runs, \
     convert_to_mph, convert_to_kmh, convert_to_fahrenheit, parse_weather, get_seconds, convert_to_date
 

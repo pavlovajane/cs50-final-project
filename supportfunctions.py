@@ -82,7 +82,11 @@ def get_user_runs(userid, db):
                 r.distance as distance,
                 r.runtime as time,
                 r.speed as speed,
-                r.weather as weather
+                CASE r.weather
+                    WHEN ""
+                        THEN "No weather"
+                    ELSE r.weather
+                END weather
                 FROM runs AS r
                 INNER JOIN users AS u ON u.id = r.user_id
                 WHERE r.user_id = ?
@@ -92,8 +96,11 @@ def get_user_runs(userid, db):
     jsonstring = json.dumps(list(runs))
     return json.loads(jsonstring)
 
-def convert_to_miles_per_h(kmh):
+def convert_to_mph(kmh):
     return kmh*1.609344
+
+def convert_to_kmh(mph):
+    return mph/1.609344
 
 def convert_to_fahrenheit(c):
     return ((c*9/5) + 32)
@@ -103,5 +110,5 @@ def parse_weather(json):
     temp = json["daily"]["temperature_2m_max"]
     ppt = json["daily"]["precipitation_sum"]
     str = f"Temp max: {temp}, Ppt(mm): {ppt}"
-    
+
     return str

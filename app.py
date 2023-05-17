@@ -5,12 +5,11 @@ from flask import Flask, flash, redirect, render_template, request, session, jso
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
-import json, requests
-import re
+import requests
 
 # internal imports
 from supportfunctions import apology, login_required, check_passowrd_validity, get_user_runs, \
-    convert_to_miles_per_h, convert_to_fahrenheit, parse_weather
+    convert_to_mph, convert_to_kmh, convert_to_fahrenheit, parse_weather
 
 # Configure application
 app = Flask(__name__)
@@ -147,7 +146,7 @@ def register():
 
 @app.route("/addrun", methods=["GET", "POST"])
 @login_required
-def quote():
+def addrun():
     
     if request.method == "POST":
         
@@ -160,12 +159,14 @@ def quote():
         if not request.form.get("distance"):
             return apology("must provide distance", 400)
         else:
-            distance = request.form.get("distance")
-        
+            distance = int(request.form.get("distance"))
+            if request.form.get("switchLabel")=="mi":
+                distance = convert_to_kmh(distance)
+            
         if not request.form.get("time"):
             return apology("must provide time", 400)
         else:
-            time = request.form.get("distance")
+            time = request.form.get("time")
 
         # read weather for latitude and langitude if city provided
         if (request.form.get("lat") and request.form.get("lang")):
@@ -187,8 +188,18 @@ def quote():
                 pass
         else:
             weather = ""
+        # Calculate speed for the run
+        speed = round(distance/time,2)
 
-        # Create a database entry 
+        # Create a database entry for the run
+        # Distance is always stored in metric, converted into imperial on the front-end only
+        # Same for the temperatures - stored in Celsius, on user's settings converted into Farenheit
+        
+        cursordb.execute("""
+                        INSERT INTO runs (user_id, rundate, distance, runtime, speed, weather) 
+                        VALUES (?, ?, ?, ?, ?, ?)
+                        """,(session["user_id"], date, distance, time, speed, weather))
+        database.commit()
 
         # Redirect user to home page
         return redirect("/")

@@ -63,10 +63,10 @@
 
         <main class="container-fluid py-5 text-center">
                 {% block main %}
-                {% if session["user_id"] %}
-               
+                {% if session["user_id"] %}         
                     {% if flash_message == True %}
                         <!-- if true - means we can load runs - they exist --> 
+                        <h1>Your tracked runs</h1>
                         <table>
                             <thead>
                                 <tr>
@@ -84,14 +84,14 @@
                                     <td>{{ run.distance }}</td>
                                     <td>{{ run.time }}</td>
                                     <td>{{ run.speed }}</td>
-                                    <td id="weather"></td>
+                                    <td>{{ run.weather }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
                         </table>                     
                     {% else %}
                         <h1>Your tracked runs</h1>
-                        <h2>No runs yet tracked, keep posting!</h2>
+                        <h2>No runs yet tracked, stay put!</h2>
                     {% endif %}
                
                 {% else %}

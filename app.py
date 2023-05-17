@@ -9,7 +9,8 @@ import json, requests
 import re
 
 # internal imports
-from supportfunctions import apology, login_required, check_passowrd_validity, get_user_runs, convert_to_miles_per_h, convert_to_fahrenheit
+from supportfunctions import apology, login_required, check_passowrd_validity, get_user_runs, \
+    convert_to_miles_per_h, convert_to_fahrenheit, parse_weather
 
 # Configure application
 app = Flask(__name__)
@@ -20,7 +21,6 @@ app.debug = True
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
-
 
 # Connect to the database
 database = sqlite3.connect("marathoner.db", check_same_thread=False)
@@ -125,14 +125,12 @@ def register():
         password = request.form.get("passwordRegister")
 
         # Check if such username exists
-
         if ((cursordb.execute("SELECT * FROM users WHERE username = ?", (username,))).rowcount != -1):
             return apology("Username is taken", 400)
 
         # Add user to the database
         cursordb.execute("INSERT INTO users (username, hash) VALUES (?, ?)", (username, generate_password_hash(password),))
         database.commit()
-        # TODO: fix execution of queries
 
         # Query database for username
         rows = cursordb.execute("SELECT id, username FROM users WHERE username = ?", (username,))
@@ -152,8 +150,6 @@ def register():
 def quote():
     
     if request.method == "POST":
-
-        # TODO: add adding a run and loading the current weather
         
         # Ensure all mandatory fields are subbmitted
         if not request.form.get("date"):
@@ -173,15 +169,18 @@ def quote():
 
         # read weather for latitude and langitude if city provided
         if (request.form.get("lat") and request.form.get("lang")):
-            # request summary weather for the api
+            # Request summary weather for the api
             try:
                 lat = request.form.get("lat")
                 lang = request.form.get("lang")
-
+                
                 url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lang}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&forecast_days=1&start_date={date}&end_date={date}&timezone=auto"
+                
                 response = requests.get(url)
                 response.raise_for_status()
-                weather = response.json()
+                load = response.json()
+                
+                weather = parse_weather(load)
             except requests.RequestException:
                 # can't load weather
                 weather = ""
@@ -189,7 +188,7 @@ def quote():
         else:
             weather = ""
 
-        # create a database entry 
+        # Create a database entry 
 
         # Redirect user to home page
         return redirect("/")

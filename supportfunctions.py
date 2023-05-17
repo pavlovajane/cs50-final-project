@@ -97,3 +97,11 @@ def convert_to_miles_per_h(kmh):
 
 def convert_to_fahrenheit(c):
     return ((c*9/5) + 32)
+
+def parse_weather(json):
+    # support function to parse weather reponse json
+    temp = json["daily"]["temperature_2m_max"]
+    ppt = json["daily"]["precipitation_sum"]
+    str = f"Temp max: {temp}, Ppt(mm): {ppt}"
+    
+    return str

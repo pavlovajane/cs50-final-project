@@ -49,9 +49,12 @@ function intializePlaces() {
     let place = autocomplete.getPlace();
 
     let lat = document.getElementById('lat');
-    lat.innerHTML = place.geometry['location'].lat();
+    lat.value = place.geometry['location'].lat();
     let long = document.getElementById('lang'); 
-    long.innerHTML = place.geometry['location'].lng();
+    long.value = place.geometry['location'].lng();
+
+    console.log(lat.value)
+    console.log(lang.value)
 
   });
 };

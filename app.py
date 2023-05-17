@@ -9,7 +9,7 @@ import requests
 
 # internal imports
 from supportfunctions import apology, login_required, check_passowrd_validity, get_user_runs, \
-    convert_to_mph, convert_to_kmh, convert_to_fahrenheit, parse_weather
+    convert_to_mph, convert_to_kmh, convert_to_fahrenheit, parse_weather, get_seconds
 
 # Configure application
 app = Flask(__name__)
@@ -188,8 +188,8 @@ def addrun():
                 pass
         else:
             weather = ""
-        # Calculate speed for the run
-        speed = round(distance/time,2)
+        # Calculate speed for the run - convert into km per hour
+        speed = round((distance*60*60)/get_seconds(time),2)
 
         # Create a database entry for the run
         # Distance is always stored in metric, converted into imperial on the front-end only

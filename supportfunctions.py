@@ -107,8 +107,14 @@ def convert_to_fahrenheit(c):
 
 def parse_weather(json):
     # support function to parse weather reponse json
-    temp = json["daily"]["temperature_2m_max"]
-    ppt = json["daily"]["precipitation_sum"]
+    temp = json["daily"]["temperature_2m_max"][0]
+    ppt = json["daily"]["precipitation_sum"][0]
     str = f"Temp max: {temp}, Ppt(mm): {ppt}"
 
     return str
+
+def get_seconds(time_str):
+    # split in hh, mm, ss
+    hh, mm, ss = time_str.split(':')
+    return int(hh) * 3600 + int(mm) * 60 + int(ss)
+

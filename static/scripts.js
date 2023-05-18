@@ -40,6 +40,16 @@ const checkDistance=(name)=>(event)=>{
 
 document.addEventListener('DOMContentLoaded', function () {
   intializePlaces();
+
+  let inputs = document.querySelectorAll('#addrunForm input');
+  inputs.forEach(function (input) {
+    input.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+      }
+    });
+  });
+
 });
 
 function intializePlaces() {

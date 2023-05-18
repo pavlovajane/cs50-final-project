@@ -1,5 +1,5 @@
 import sqlite3
-from flask import Flask, flash, redirect, render_template, request, session, jsonify
+from flask import Flask, flash, redirect, render_template, request, session, jsonify, g
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -24,12 +24,21 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# Connect to the database
-database = sqlite3.connect("marathoner.db", check_same_thread=False)
-cursordb = database.cursor()
+@app.before_request
+def before_request():
+    # Connect to the database
+    if "db" not in g:
+        g.db = sqlite3.connect("marathoner.db", check_same_thread=False)
+    
+    if "crs" not in g:
+        g.crs = g.db.cursor()
 
 @app.after_request
 def after_request(response):
+    # close connection
+    if g.db is not None:
+        g.db.close()
+
     """Ensure responses aren't cached"""
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     response.headers["Expires"] = 0
@@ -42,15 +51,15 @@ def delete_run(runid):
     """Delete a run by its id"""
     if request.method == "DELETE" and runid != None:
         # triggered row deletion
-        cursordb.execute("DELETE FROM runs WHERE id = ?", (runid,))
-        database.commit()
+        g.crs.execute("DELETE FROM runs WHERE id = ?", (runid,))
+        g.db.commit()
         return jsonify(message="Run deleted")
 
 @app.route("/", methods=["GET"])
 @login_required
 def index():
     """Show runs done for logged in user"""
-    runs = get_user_runs(session["user_id"], cursordb)
+    runs = get_user_runs(session["user_id"], g.crs)
     today = date.today()
 
     flash_message = False
@@ -80,7 +89,7 @@ def login():
             return apology("must provide password", 403)
 
         # Query database for username
-        rows = cursordb.execute("SELECT * FROM users WHERE username = ?", (request.form.get("username"),))
+        rows = g.crs.execute("SELECT * FROM users WHERE username = ?", (request.form.get("username"),))
         user = rows.fetchone()
 
         # Ensure username exists and password is correct
@@ -150,15 +159,15 @@ def register():
         password = request.form.get("passwordRegister")
 
         # Check if such username exists
-        if ((cursordb.execute("SELECT * FROM users WHERE username = ?", (username,))).rowcount != -1):
+        if ((g.crs.execute("SELECT * FROM users WHERE username = ?", (username,))).rowcount != -1):
             return apology("Username is taken", 400)
 
         # Add user to the database
-        cursordb.execute("INSERT INTO users (username, hash) VALUES (?, ?)", (username, generate_password_hash(password),))
-        database.commit()
+        g.crs.execute("INSERT INTO users (username, hash) VALUES (?, ?)", (username, generate_password_hash(password),))
+        g.db.commit()
 
         # Query database for username
-        rows = cursordb.execute("SELECT id, username FROM users WHERE username = ?", (username,))
+        rows = g.crs.execute("SELECT id, username FROM users WHERE username = ?", (username,))
         user = rows.fetchone(); 
         # Remember which user has logged in
         session["user_id"] = user[0]
@@ -227,11 +236,11 @@ def addrun():
         # Distance is always stored in metric, converted into imperial on the front-end only
         # Same for the temperatures - stored in Celsius, on user's settings converted into Farenheit
         
-        cursordb.execute("""
+        g.crs.execute("""
                         INSERT INTO runs (user_id, rundate, distance, runtime, speed, city, weather) 
                         VALUES (?, ?, ?, ?, ?, ?, ?)
                         """,(session["user_id"], date, round(distance,2), time, speed, city, weather))
-        database.commit()
+        g.db.commit()
 
         # Redirect user to home page
         return redirect("/")

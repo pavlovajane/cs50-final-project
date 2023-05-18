@@ -5,4 +5,16 @@ User profile
 {% endblock %}
 
 {% block main %}
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="flexRadioMetric" id="flexRadioMetric" checked>
+        <label class="form-check-label" for="flexRadioDefault1">
+            Metric (Celsius, kilometers, kmh)
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="flexRadioImperial" id="flexRadioImperial" >
+        <label class="form-check-label" for="flexRadioDefault2">
+            Imperial (Farenheit, miles, mph)
+        </label>
+    </div>
 {% endblock %}

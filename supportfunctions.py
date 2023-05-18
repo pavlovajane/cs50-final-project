@@ -102,12 +102,13 @@ def get_user_runs(userid, db):
     runsdict = []
     for row in runs:
         dict = {
-            "date": row[0],
-            "distance": row[1],
-            "time": row[2],
-            "speed": row[3],
-            "city": row[4],
-            "weather": row[5]
+            "id": row[0],
+            "date": row[1],
+            "distance": row[2],
+            "time": row[3],
+            "speed": row[4],
+            "city": row[5],
+            "weather": row[6]
         }
         runsdict.append(dict)
 

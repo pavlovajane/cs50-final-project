@@ -36,14 +36,19 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
-@app.route("/", methods=["GET", "POST"])
+@app.route('/<int:runid>', methods=['DELETE'])
+@login_required
+def delete_run(runid):
+    """Delete a run by its id"""
+    if request.method == "DELETE" and runid != None:
+        # triggered row deletion
+        cursordb.execute("DELETE FROM runs WHERE id = ?", (runid,))
+        database.commit()
+        return jsonify(message="Run deleted")
+
+@app.route("/", methods=["GET"])
 @login_required
 def index():
-
-    if request.method == "POST":
-        # TODO implement row deletion
-        a=a
-
     """Show runs done for logged in user"""
     runs = get_user_runs(session["user_id"], cursordb)
     today = date.today()

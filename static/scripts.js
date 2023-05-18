@@ -76,8 +76,21 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-function deleteTableRow(rowid){
-  console.log(rowid);
+function deleteTableRow(rowid) {
+
+  // if row delete button was clicked - intiate row deletion
+  let httpreq = new XMLHttpRequest();
+
+  httpreq.open("DELETE", "/" + rowid, true);
+  httpreq.setRequestHeader("Content-Type", "application/json");
+  httpreq.onreadystatechange = function() {
+      if (httpreq.readyState === XMLHttpRequest.DONE && httpreq.status === 200) {
+        // Handle the response from the server if needed
+        window.location.reload();
+      }
+    };
+  httpreq.send();
+
 };
 
 document.addEventListener("DOMContentLoaded", checkPassword("passwordRegister")); 

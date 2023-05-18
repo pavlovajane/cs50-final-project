@@ -37,6 +37,7 @@ const checkDistance=(name)=>(event)=>{
   });
 };
 
+
 document.addEventListener('DOMContentLoaded', function () {
   intializePlaces();
 });
@@ -75,6 +76,11 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
+function deleteTableRow(rowid){
+  console.log(rowid);
+};
+
 document.addEventListener("DOMContentLoaded", checkPassword("passwordRegister")); 
 document.addEventListener("DOMContentLoaded", checkPassword("confirmationRegister")); 
 document.addEventListener("DOMContentLoaded", checkDistance("distance"));
+

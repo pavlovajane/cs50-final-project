@@ -78,6 +78,7 @@ def get_user_runs(userid, db):
     """Show portfolio of stocks if share>0"""
     runs = db.execute("""
                 SELECT
+                r.id as id,
                 r.rundate as date,
                 r.distance as distance,
                 r.runtime as time,

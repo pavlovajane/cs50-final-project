@@ -89,6 +89,7 @@
                                     <td>{{ run.speed }}</td>
                                     <td>{{ run.city }}</td>
                                     <td>{{ run.weather }}</td>
+                                    <td><button type="button" onclick="deleteTableRow('{{ run.id }}')" class="btn btn-primary">Delete</button></td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

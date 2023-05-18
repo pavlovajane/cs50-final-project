@@ -36,9 +36,14 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
+
+    if request.method == "POST":
+        # TODO implement row deletion
+        a=a
+
     """Show runs done for logged in user"""
     runs = get_user_runs(session["user_id"], cursordb)
     today = date.today()

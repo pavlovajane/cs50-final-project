@@ -8,8 +8,7 @@ from datetime import date
 
 # Internal imports
 from supportfunctions import handle_exception, login_required, check_passowrd_validity, get_user_runs, \
-    convert_to_mph, convert_to_kmh, convert_to_fahrenheit, parse_weather, get_seconds, convert_to_date, \
-    get_profile_settings
+    parse_weather, get_seconds, convert_to_date, get_profile_settings
 
 # Configure application
 app = Flask(__name__)
@@ -263,7 +262,7 @@ def addrun():
         return redirect("/")
     else:
         # Request is sent via GET - open the quote form
-        return render_template("addrun.html")
+        return render_template("addrun.html", imperial = session["imperial"])
 
 if __name__ == "__main__":
     app.run(ssl_context='adhoc')

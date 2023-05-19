@@ -105,7 +105,7 @@ def get_user_runs(userid, db):
         
         if row[7] ==1:
             # Users' settings set to imperial - convert into F, mph and miles
-            distance =  round(row[2]*1.60934,2)
+            distance =  round(row[2]/1.60934,2)
             speed = round(convert_to_mph(row[4]),2)
             weather = row[6] 
             if weather != "N/A":
@@ -114,7 +114,7 @@ def get_user_runs(userid, db):
                     ppt = weather.find("Ppt(mm)")
                 # weather template is 'Temp max: 00.0, Ppt(mm): 0.0'
                 temp = weather[pos+2:ppt-2] 
-                ftemp = str(convert_to_fahrenheit(float(temp)))
+                ftemp = str(round(convert_to_fahrenheit(float(temp)),2))
                 weather = weather.replace(temp, ftemp)
         else:
             # if imperial = 0 - then system is metric, default to store in database in metric
@@ -151,10 +151,7 @@ def get_profile_settings(userid, db):
 
 
 def convert_to_mph(kmh):
-    return kmh*0.621371
-
-def convert_to_kmh(mph):
-    return mph*1.609344
+    return kmh/1.609
 
 def convert_to_fahrenheit(c):
     return ((c*9/5) + 32)

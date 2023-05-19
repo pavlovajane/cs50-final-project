@@ -16,8 +16,8 @@ Add a run
             <div class="distance-group">
                 <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="distance" name="distance" type="text">
                 <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" name="flexSwitchCheckDefault">
-                    <label class="form-check-label" for="flexSwitchCheckDefault" id="switchLabel" name="switchLabel">km</label>
+                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" name="flexSwitchCheckDefault" {% if imperial==1 %}checked{% endif %}>
+                    <label class="form-check-label" for="flexSwitchCheckDefault" id="switchLabel" name="switchLabel">{% if imperial==1 %}mi{% else %}km{% endif %}</label>
                 </div>
             </div>
         </div>

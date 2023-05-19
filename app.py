@@ -7,7 +7,7 @@ import requests
 from datetime import date
 
 # Internal imports
-from supportfunctions import apology, login_required, check_passowrd_validity, get_user_runs, \
+from supportfunctions import handle_exception, login_required, check_passowrd_validity, get_user_runs, \
     convert_to_mph, convert_to_kmh, convert_to_fahrenheit, parse_weather, get_seconds, convert_to_date, \
     get_profile_settings
 
@@ -83,23 +83,24 @@ def login():
 
         # Ensure username was submitted
         if not request.form.get("username"):
-            return apology("must provide username", 403)
+            return handle_exception("must provide username", 403)
 
         # Ensure password was submitted
         elif not request.form.get("password"):
-            return apology("must provide password", 403)
+            return handle_exception("must provide password", 403)
 
-        # Query database for username
-        rows = g.crs.execute("SELECT * FROM users WHERE username = ?", (request.form.get("username"),))
+        # Query database for user information
+        rows = g.crs.execute("SELECT id, username, imperial FROM users WHERE username = ?", (request.form.get("username"),))
         user = rows.fetchone()
 
         # Ensure username exists and password is correct
         if user == None or not check_password_hash(user[2], request.form.get("password")):
-            return apology("invalid username and/or password", 403)
+            return handle_exception("invalid username and/or password", 403)
 
         # Remember which user has logged in
         session["user_id"] = user[0]
         session["username"] = user[1]
+        session["imperial"] = user[2]
 
         # Redirect user to home page
         return redirect("/")
@@ -120,22 +121,20 @@ def logout():
 
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
-    # TODO: implement profile - let user choose btw imperical and metric
-
+  
     if request.method == "POST":
         
         checkbox = request.form.get("flexRadio")
-
-        imperialnew = 1 if checkbox[0]=="flexRadioImperial" else 0
+        
+        # Update settings
+        imperialnew = 1 if checkbox=="imperial" else 0
         g.crs.execute("""
                     UPDATE users 
                     SET imperial = ?
                     WHERE id = ?
                     """, (imperialnew, session["user_id"],))
         g.db.commit()
-        
-        # Update settings
-        
+        session["imperial"] = imperialnew
         # Redirect to index
         return redirect("/")
     
@@ -154,39 +153,41 @@ def register():
 
         # Ensure username was submitted
         if not request.form.get("username"):
-            return apology("must provide username", 400)
+            return handle_exception("must provide username", 400)
 
         # Ensure password was submitted
         elif not request.form.get("passwordRegister"):
-            return apology("must provide password", 400)
+            return handle_exception("must provide password", 400)
 
         # Ensure password was confirmed
         elif not request.form.get("confirmationRegister"):
-            return apology("must confirm password", 400)
+            return handle_exception("must confirm password", 400)
 
         # Ensure confirmation matched password
         elif not (request.form.get("passwordRegister") == request.form.get("confirmationRegister")):
-            return apology("Password and confirmation don't match", 400)
+            return handle_exception("Password and confirmation don't match", 400)
         
         elif not check_passowrd_validity(request.form.get("passwordRegister")):
-            return apology("Password should be at least 8 letters, one digit, one capital letter and one special character", 400)
+            return handle_exception("Password should be at least 8 letters, one digit, one capital letter and one special character", 400)
 
         username = request.form.get("username")
         password = request.form.get("passwordRegister")
 
         # Check if such username exists
         if ((g.crs.execute("SELECT * FROM users WHERE username = ?", (username,))).rowcount != -1):
-            return apology("Username is taken", 400)
+            return handle_exception("Username is taken", 400)
 
         # Add user to the database
         g.crs.execute("INSERT INTO users (username, hash) VALUES (?, ?)", (username, generate_password_hash(password),))
         g.db.commit()
 
         # Query database for username
-        rows = g.crs.execute("SELECT id, username FROM users WHERE username = ?", (username,))
+        rows = g.crs.execute("SELECT id, username, imperial FROM users WHERE username = ?", (username,))
         user = rows.fetchone(); 
         # Remember which user has logged in
         session["user_id"] = user[0]
+        session["username"] = user[1]
+        session["imperial"] = user[2]
 
         # Redirect user to home page
         return redirect("/")
@@ -203,12 +204,12 @@ def addrun():
         
         # Ensure all mandatory fields are subbmitted
         if not request.form.get("date"):
-            return apology("must provide date", 400)
+            return handle_exception("must provide date", 400)
         else:
             date = request.form.get("date")
         
         if not request.form.get("distance"):
-            return apology("must provide distance", 400)
+            return handle_exception("must provide distance", 400)
         else:
             distance = int(request.form.get("distance"))
             if request.form.get("flexSwitchCheckDefault")=="mi":
@@ -221,7 +222,7 @@ def addrun():
             city = request.form.get("city")
 
         if not request.form.get("time"):
-            return apology("must provide time", 400)
+            return handle_exception("must provide time", 400)
         else:
             time = request.form.get("time")
 

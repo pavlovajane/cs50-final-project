@@ -40,7 +40,7 @@
                     </ul>
                     <ul class="navbar-nav ms-auto mt-2">
                         <li class="nav-link">Hello, {{ session["username"] }}</li>
-                        <li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/profile">Profile {% if session["imperial"]==1 %}(imp.){% else %}(metr.){% endif %}</a></li>
                         <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
                     </ul>
                     {% else %}

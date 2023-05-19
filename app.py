@@ -8,7 +8,8 @@ from datetime import date
 
 # Internal imports
 from supportfunctions import apology, login_required, check_passowrd_validity, get_user_runs, \
-    convert_to_mph, convert_to_kmh, convert_to_fahrenheit, parse_weather, get_seconds, convert_to_date
+    convert_to_mph, convert_to_kmh, convert_to_fahrenheit, parse_weather, get_seconds, convert_to_date, \
+    get_profile_settings
 
 # Configure application
 app = Flask(__name__)
@@ -123,11 +124,26 @@ def profile():
 
     if request.method == "POST":
         
+        checkbox = request.form.get("flexRadio")
+
+        imperialnew = 1 if checkbox[0]=="flexRadioImperial" else 0
+        g.crs.execute("""
+                    UPDATE users 
+                    SET imperial = ?
+                    WHERE id = ?
+                    """, (imperialnew, session["user_id"],))
+        g.db.commit()
+        
+        # Update settings
+        
         # Redirect to index
         return redirect("/")
     
     else:
-        return render_template("profile.html")
+        # By default site uses metric system
+        imperial = get_profile_settings(session["user_id"], g.db)
+
+        return render_template("profile.html", imperial = imperial)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():

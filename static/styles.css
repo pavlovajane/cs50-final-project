@@ -2,6 +2,19 @@
     background-color:#f1c3c6;
 }
 
+.measurements {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.form-check {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 .addruns {
     display: flex;
     flex-direction: row;

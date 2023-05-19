@@ -22,8 +22,7 @@ const checkPassword=(name)=>(event)=>{
 };
 
 const checkDistance=(name)=>(event)=>{
-  // only positive floats or integers
-  // const distanceRegex = /^[-+]?[0-9]+\.[0-9]+$/;
+ 
   const distanceInput = document.getElementById("distance");
   
   distanceInput.addEventListener('input', function (event) {

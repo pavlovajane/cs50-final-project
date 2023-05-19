@@ -114,6 +114,21 @@ def get_user_runs(userid, db):
 
     return runsdict
 
+def get_profile_settings(userid, db):
+    # get current units setup for the user
+    units = db.execute("""
+                SELECT
+                imperial
+                FROM
+                users
+                WHERE id = ?
+                """, (userid,))
+
+    # Return false is no data or imperial (1 == True, 0 == False)
+    imperial = units.fetchone()
+    return False if imperial is None else (True if imperial[0]==1 else False)
+
+
 def convert_to_mph(kmh):
     return kmh*1.609344
 

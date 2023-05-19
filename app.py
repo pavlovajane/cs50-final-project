@@ -8,7 +8,7 @@ from datetime import date
 
 # Internal imports
 from supportfunctions import handle_exception, login_required, check_passowrd_validity, get_user_runs, \
-    parse_weather, get_seconds, convert_to_date, get_profile_settings
+    parse_weather, get_seconds, convert_to_date, get_user_settings
 
 # Configure application
 app = Flask(__name__)
@@ -54,6 +54,13 @@ def delete_run(runid):
         g.crs.execute("DELETE FROM runs WHERE id = ?", (runid,))
         g.db.commit()
         return jsonify(message="Run deleted")
+
+@app.route("/compare", methods=["GET"])
+@login_required
+def compare():
+    # TODO chart with run comparison
+    
+    return render_template("compare.html")
 
 @app.route("/", methods=["GET"])
 @login_required
@@ -118,8 +125,8 @@ def logout():
     # Redirect user to login form
     return redirect("/")
 
-@app.route("/profile", methods=["GET", "POST"])
-def profile():
+@app.route("/settings", methods=["GET", "POST"])
+def settings():
   
     if request.method == "POST":
         
@@ -139,9 +146,9 @@ def profile():
     
     else:
         # By default site uses metric system
-        imperial = get_profile_settings(session["user_id"], g.db)
+        imperial = get_user_settings(session["user_id"], g.db)
 
-        return render_template("profile.html", imperial = imperial)
+        return render_template("settings.html", imperial = imperial)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():

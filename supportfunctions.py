@@ -135,7 +135,7 @@ def get_user_runs(userid, db):
 
     return runsdict
 
-def get_profile_settings(userid, db):
+def get_user_settings(userid, db):
     # get current units setup for the user
     units = db.execute("""
                 SELECT

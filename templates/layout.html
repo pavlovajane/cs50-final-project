@@ -26,7 +26,7 @@
 
         <nav class="bg-light border navbar navbar-expand-md navbar-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/"><span class="green">You</span><span class="green"> are</span><span class="green"> a</span><span class="green"> marathoner!</span></a>
+                <a class="navbar-brand" href="/"><span class="yellow">You</span><span class="yellow"> are</span><span class="yellow"> a</span><span class="yellow"> marathoner!</span></a>
                 <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
                     data-bs-target="#navbar" data-bs-toggle="collapse" type="button">
                     <span class="navbar-toggler-icon"></span>
@@ -40,7 +40,7 @@
                     </ul>
                     <ul class="navbar-nav ms-auto mt-2">
                         <li class="nav-link">Hello, {{ session["username"] }}</li>
-                        <li class="nav-item"><a class="nav-link" href="/profile">Profile {% if session["imperial"]==1 %}(imp.){% else %}(metr.){% endif %}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/settings">Profile {% if session["imperial"]==1 %}(imp.){% else %}(metr.){% endif %}</a></li>
                         <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
                     </ul>
                     {% else %}

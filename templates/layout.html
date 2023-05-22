@@ -71,9 +71,9 @@
                             <thead>
                                 <tr>
                                     <th>Date</th>
-                                    <th>Distance</th>
+                                    <th>Distance {% if session["imperial"]==1 %}(mi){% else %}(km){% endif %}</th>
                                     <th>Time</th>
-                                    <th>Speed (Distance/Time)</th>
+                                    <th>Speed {% if session["imperial"]==1 %}(mph){% else %}(kmh){% endif %}</th>
                                     <th>City/Place</th>
                                     <th>Weather</th>
                                 </tr>

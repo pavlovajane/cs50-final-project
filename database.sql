@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS runs (
     runtime TEXT NOT NULL,
     speed REAL NOT NULL,
     weather TEXT,
-    FOREIGN KEY (user_id) REFERENCES users (id))
+    FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
 CREATE TABLE IF NOT EXISTS marathoners (
@@ -22,7 +22,11 @@ CREATE TABLE IF NOT EXISTS marathoners (
     speed4week REAL NOT NULL,
     crosstraining TEXT,
     marathontime REAL NOT NULL,
-    performancecategory CHARACTER(1))
+    performancecategory CHARACTER(1)
+);
+
+CREATE VIEW IF NOT EXISTS 4weeks (
+-- TBD view to calculate 4week results per user_id to compare with marathoners
 );
 
 CREATE INDEX user_id ON runs(user_id);

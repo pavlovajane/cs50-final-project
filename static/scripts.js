@@ -87,6 +87,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function deleteTableRow(rowid) {
 
+  if (confirm("Confirm row deletion") != true) {
+    return;
+  }
   // if row delete button was clicked - intiate row deletion
   let httpreq = new XMLHttpRequest();
 

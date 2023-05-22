@@ -15,6 +15,7 @@
   * More security of the account - e.g. password restore and change
   * Filtering and/or sorting in the runs
   * More uesr friendly adding of the runs
+  * Add user's personal info - age (to compare with age group), gender (to compare with age-gender group)
   * TBC
   
 [![memecomplete](https://api.memegen.link/images/bihw/it_ain't_much/but_it_is_the_honest_final_work.jpg?token=g2pd8jp936gb8xraaswq)](https://memecomplete.com/share/images/bihw/it_ain't_much/but_it_is_the_honest_final_work.jpg?token=g2pd8jp936gb8xraaswq)

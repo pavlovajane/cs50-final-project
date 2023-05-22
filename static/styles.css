@@ -9,10 +9,14 @@
     align-items: center;
 }
 
-.form-check {
+.form-check .chart {
     display: flex;
     flex-direction: row;
     align-items: center;
+}
+
+.chart {
+    padding: 3em;
 }
 
 .addruns {

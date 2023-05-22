@@ -58,7 +58,6 @@ def delete_run(runid):
 @app.route("/compare", methods=["GET"])
 @login_required
 def compare():
-    # TODO chart with run comparison
     
     return render_template("compare.html")
 

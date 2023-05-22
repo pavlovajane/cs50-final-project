@@ -115,7 +115,7 @@ def get_user_runs(userid, db):
                 # weather template is 'Temp max: 00.0, Ppt(mm): 0.0'
                 temp = weather[pos+2:ppt-2] 
                 # add F sign for farenheit
-                ftemp = str(round(convert_to_fahrenheit(float(temp)),2)) + " F"
+                ftemp = str(round(convert_to_fahrenheit(float(temp)),2)) + " F" + chr(176)
                 weather = weather.replace(temp, ftemp)
         else:
             # if imperial = 0 - then system is metric, default to store in database in metric
@@ -130,7 +130,7 @@ def get_user_runs(userid, db):
                     ppt = weather.find("Ppt(mm)")
                 # weather template is 'Temp max: 00.0, Ppt(mm): 0.0'
                 temp = weather[pos+2:ppt-2]
-                weather = weather.replace(temp, temp + " C")
+                weather = weather.replace(temp, temp + " C" + chr(176))
 
         dict = {
             "id": row[0],

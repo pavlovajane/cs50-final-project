@@ -16,6 +16,11 @@
 }
 
 .chart {
+    display: flex !important;
+    flex-direction: column;
+    flex-basis: 0;
+    flex-grow: 1;
+    box-sizing: border-box;
     padding-left: 3em;
     padding-right: 3em;
     padding-bottom: 1em;
@@ -147,3 +152,4 @@ table td {
 .form-check-label {
     padding-right: 1em;
 }
+

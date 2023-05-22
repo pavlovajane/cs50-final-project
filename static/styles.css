@@ -16,7 +16,9 @@
 }
 
 .chart {
-    padding: 3em;
+    padding-left: 3em;
+    padding-right: 3em;
+    padding-bottom: 1em;
 }
 
 .addruns {
@@ -133,7 +135,15 @@ table td {
     visibility: visible;
 }
 
-/* set the position of the input field to relative */
 #passwordRegister {
     position: relative;
+}
+
+.checkcompare {
+    display: flex !important;
+    justify-content: center !important;
+}
+
+.form-check-label {
+    padding-right: 1em;
 }

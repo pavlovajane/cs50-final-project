@@ -1,4 +1,4 @@
-const checkPassword=(name)=>(event)=>{
+const checkPassword = (name) => { 
   const passwordInput = document.getElementById(name);
 
   // Has minimum 8 characters in length
@@ -21,7 +21,7 @@ const checkPassword=(name)=>(event)=>{
   });
 };
 
-const checkDistance=(name)=>(event)=>{
+const checkDistance = (name) => {
  
   const distanceInput = document.getElementById("distance");
   
@@ -36,11 +36,9 @@ const checkDistance=(name)=>(event)=>{
   });
 };
 
-
-document.addEventListener('DOMContentLoaded', function () {
-  intializePlaces();
-
+const registerAddRunInput = () => {
   let inputs = document.querySelectorAll('#addrunForm input');
+
   inputs.forEach(function (input) {
     input.addEventListener('keydown', function (event) {
       if (event.key === 'Enter') {
@@ -48,28 +46,23 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   });
-
-});
+}
 
 function intializePlaces() {
-
   let input = document.getElementById('city');
   let autocomplete = new google.maps.places.Autocomplete(input);
+  
   autocomplete.addListener('place_changed', function () {
     let place = autocomplete.getPlace();
-
     let lat = document.getElementById('lat');
+  
     lat.value = place.geometry['location'].lat();
     let long = document.getElementById('lang'); 
     long.value = place.geometry['location'].lng();
-
-    console.log(lat.value)
-    console.log(lang.value)
-
   });
 };
 
-document.addEventListener('DOMContentLoaded', function() {
+const registerMeasurementSwitcher = () => {
   // Your JavaScript code here
   const switchInput = document.getElementById('flexSwitchCheckDefault');
   const switchLabel = document.getElementById('switchLabel');
@@ -83,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
       switchInput.value = 'km';
     }
   });
-});
+};
 
 function deleteTableRow(rowid) {
 
@@ -105,7 +98,25 @@ function deleteTableRow(rowid) {
 
 };
 
-document.addEventListener("DOMContentLoaded", checkPassword("passwordRegister")); 
-document.addEventListener("DOMContentLoaded", checkPassword("confirmationRegister")); 
-document.addEventListener("DOMContentLoaded", checkDistance("distance"));
+const router = (event) => {
+  switch(window.location.pathname) {
+    case "/":
+      break;
+    case "/addrun":
+      intializePlaces();
+      registerAddRunInput();
+      checkDistance("distance");
+      registerMeasurementSwitcher();
+      break
+    case "/compare":
+      break
+    case "/settings":
+      break
+    case "/register":
+      checkPassword("passwordRegister"); 
+      checkPassword("confirmationRegister");
+      break        
+  }
+}
 
+document.addEventListener("DOMContentLoaded", router);

@@ -5,17 +5,18 @@ Compare your runs
 {% endblock %}
 
 {% block main %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <div class="chart">
     <h1>Comparison with marathoners' data</h1>
     <div class="checkcompare">
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="flexRadioCompare" id="flexRadioDistance" value="distance" required checked>
+            <input class="form-check-input" type="radio" name="flexRadioCompare" id="flexRadioDistance" value="Distance" required checked>
             <label class="form-check-label" for="flexRadioDefault1">
                 Compare your distance 
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="flexRadioCompare" id="flexRadioSpeed" value="speed" required>
+            <input class="form-check-input" type="radio" name="flexRadioCompare" id="flexRadioSpeed" value="Speed" required>
             <label class="form-check-label" for="flexRadioDefault2">
                 Compare your speed 
             </label>
@@ -26,8 +27,6 @@ Compare your runs
     </div>  
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
     var xyValues = [
         { x: 50, y: 7 },
@@ -37,10 +36,21 @@ Compare your runs
         { x: 90, y: 9 }
     ];
 
+    let chartHeader = "Distance";
+
+    let xAxisNodes = document.getElementsByName("flexRadioCompare");
+
+    for (let i = 0; i < xAxisNodes.length; i++) {
+        let item = xAxisNodes[i];
+        chartHeader = item.value;
+        break;
+    };
+
     new Chart("myChartId", {
         type: "scatter",
         data: {
             datasets: [{
+                label: chartHeader,
                 pointRadius: 4,
                 pointBackgroundColor: "rgb(0,0,255)",
                 data: xyValues
@@ -48,12 +58,8 @@ Compare your runs
         },
         options: {
             legend: { display: false },
-            // scales: {
-            //     xAxes: [{ ticks: { min: 40, max: 160 } }],
-            //     yAxes: [{ ticks: { min: 6, max: 16 } }],
             responsive: true,
             maintainAspectRatio: false
-            // }
         }
     });
 </script>

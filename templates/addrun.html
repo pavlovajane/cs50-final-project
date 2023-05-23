@@ -5,6 +5,8 @@ Add a run
 {% endblock %}
 
 {% block main %}
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyArkA-xlL26ZPHbBGpQdRz_7IOAosKJIWo&libraries=places&callback=intializePlaces">
+</script> 
 <form action="/addrun" method="post" id="addrunForm">
     <div class="addruns">
         <div class="mb-3">
@@ -37,6 +39,4 @@ Add a run
         </div>
     </div>
 </form>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyArkA-xlL26ZPHbBGpQdRz_7IOAosKJIWo&libraries=places&callback=intializePlaces">
-</script> 
 {% endblock %}

@@ -26,41 +26,4 @@ Compare your runs
         <canvas id="myChartId"></canvas>
     </div>  
 </div>
-
-<script>
-    var xyValues = [
-        { x: 50, y: 7 },
-        { x: 60, y: 8 },
-        { x: 70, y: 8 },
-        { x: 80, y: 9 },
-        { x: 90, y: 9 }
-    ];
-
-    let chartHeader = "Distance";
-
-    let xAxisNodes = document.getElementsByName("flexRadioCompare");
-
-    for (let i = 0; i < xAxisNodes.length; i++) {
-        let item = xAxisNodes[i];
-        chartHeader = item.value;
-        break;
-    };
-
-    new Chart("myChartId", {
-        type: "scatter",
-        data: {
-            datasets: [{
-                label: chartHeader,
-                pointRadius: 4,
-                pointBackgroundColor: "rgb(0,0,255)",
-                data: xyValues
-            }]
-        },
-        options: {
-            legend: { display: false },
-            responsive: true,
-            maintainAspectRatio: false
-        }
-    });
-</script>
 {% endblock %}

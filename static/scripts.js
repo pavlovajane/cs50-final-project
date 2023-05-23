@@ -1,3 +1,5 @@
+let myChart = null;
+
 const checkPassword = (name) => { 
   const passwordInput = document.getElementById(name);
 
@@ -63,7 +65,7 @@ function intializePlaces() {
 };
 
 const registerMeasurementSwitcher = () => {
-  // Your JavaScript code here
+  
   const switchInput = document.getElementById('flexSwitchCheckDefault');
   const switchLabel = document.getElementById('switchLabel');
 
@@ -76,6 +78,23 @@ const registerMeasurementSwitcher = () => {
       switchInput.value = 'km';
     }
   });
+};
+
+const registerMeasurementSwitcherChart = () => {
+  
+  const xAxisNodes = document.getElementsByName("flexRadioCompare");
+
+  for (let i = 0; i < xAxisNodes.length; i++) {
+    let item = xAxisNodes[i];
+    item.addEventListener('click', function() {
+  
+          chartHeader = item.value;
+          console.log(chartHeader)
+          loadChart(chartHeader);
+      });
+  };
+  
+  
 };
 
 function deleteTableRow(rowid) {
@@ -98,6 +117,45 @@ function deleteTableRow(rowid) {
 
 };
 
+function loadChart(chartHeader = "Distance") {
+
+  var xyValues = [
+    { x: 50, y: 7 },
+    { x: 60, y: 8 },
+    { x: 70, y: 8 },
+    { x: 80, y: 9 },
+    { x: 90, y: 9 }
+  ];
+
+  let ctx = document.getElementById("myChartId").getContext("2d");
+  // rdestroy previous chart if created before re-creating
+  if (myChart) {
+    myChart.clear();
+    myChart.destroy();
+  };
+
+  myChart = new Chart(ctx, {
+    type: "scatter",
+    data: {
+      datasets: [{
+        label: chartHeader,
+        pointRadius: 4,
+        pointBackgroundColor: "rgb(0,0,255)",
+        data: xyValues
+      }]
+    },
+    options: {
+      legend: { display: false },
+      responsive: true,
+      maintainAspectRatio: false
+    }
+  });
+};
+
+function getChartData() {
+
+};
+
 const router = (event) => {
   switch(window.location.pathname) {
     case "/":
@@ -109,6 +167,8 @@ const router = (event) => {
       registerMeasurementSwitcher();
       break
     case "/compare":
+      registerMeasurementSwitcherChart();
+      loadChart();
       break
     case "/settings":
       break

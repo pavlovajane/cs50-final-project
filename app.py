@@ -4,7 +4,7 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 import requests
-from datetime import date
+from datetime import date, datetime, timedelta
 
 # Internal imports
 from supportfunctions import handle_exception, login_required, check_passowrd_validity, get_user_runs, \
@@ -55,10 +55,50 @@ def delete_run(runid):
         g.db.commit()
         return jsonify(message="Run deleted")
 
+@app.route("/api/compare", methods=["POST"])
+@login_required
+def compare_runs():
+
+    if request.method == "POST":
+        data = request.form
+        queryruns = """
+        SELECT 
+        user_id as athlete,
+        AVG(distance) as distance,
+        0 as time
+        FROM runs 
+        WHERE user_id = ? AND (rundate >= ? AND rundate <= ?) 
+        GROUP BY user_id, time
+        """
+        if data["chartType"]=="Speed":
+            query = query.replace("AVG(distance) as distance", "AVG(speed) as speed")
+
+        # calculate week from the date of the report chosen by user
+        datereport = data["date"]
+        datestr = datetime.strptime(datereport, '%Y-%m-%d')
+        weekbefore = datestr - timedelta(days=7)
+        weekbefore = weekbefore.strftime('%Y-%m-%d')
+
+        querymarath = """
+        SELECT 
+        id as athlete,
+        km4week as distance,
+        marathontime as time
+        FROM marathoners
+        ORDER BY distance
+        """
+        if data["chartType"]=="Speed":
+            querymarath = querymarath.replace("km4week as distance", "speed4week as speed")
+            querymarath = querymarath.replace("ORDER BY distance","ORDER BY speed")
+
+        g.crs.execute(queryruns, (session["user_id"],weekbefore,date,))
+
+    return jsonify()
+
 @app.route("/compare", methods=["GET"])
 @login_required
 def compare():
-    
+
     return render_template("compare.html")
 
 @app.route("/", methods=["GET"])

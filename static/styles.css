@@ -147,9 +147,20 @@ table td {
 .checkcompare {
     display: flex !important;
     justify-content: center !important;
+    align-items: center;
 }
 
 .form-check-label {
     padding-right: 1em;
+}
+
+.form-check {
+    padding-left: 2em;
+}
+
+.datecompareblock {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 

@@ -16,6 +16,8 @@
   * Filtering and/or sorting in the runs
   * More uesr friendly adding of the runs
   * Add user's personal info - age (to compare with age group), gender (to compare with age-gender group)
+  * Implement a training plan creation - should take into account average km per week, days to run, plan start date
+  * Implement plan adaptaion to recorded run - check the number of done/planned runs and ask about adjustment
   * TBC
   
 [![memecomplete](https://api.memegen.link/images/bihw/it_ain't_much/but_it_is_the_honest_final_work.jpg?token=g2pd8jp936gb8xraaswq)](https://memecomplete.com/share/images/bihw/it_ain't_much/but_it_is_the_honest_final_work.jpg?token=g2pd8jp936gb8xraaswq)

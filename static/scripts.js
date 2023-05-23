@@ -89,12 +89,39 @@ const registerMeasurementSwitcherChart = () => {
     item.addEventListener('click', function() {
   
           chartHeader = item.value;
-          console.log(chartHeader)
           loadChart(chartHeader);
+
       });
   };
+};
+
+const registerCompareDateSwitcher = () => {
+
+  const dt = document.getElementById("datecompare");
+
+  // if value is empty - set current date
+  if (!dt.value) {
+    date = new Date();
+    
+    // format current date to YYYY-MM-DD
+    let dateFormat = date.getFullYear() + "-" +((date.getMonth()+1).toString().length != 2 ? "0" 
+    + (date.getMonth() + 1) : (date.getMonth()+1)) + "-" + (date.getDate().toString().length != 2 ?"0" 
+    + date.getDate() : date.getDate());
+    dt.value = dateFormat;
+   
+  };
   
-  
+  const xAxisNodes = document.getElementsByName("flexRadioCompare");
+  if (xAxisNodes.length !=0) {
+    chartHeader = xAxisNodes[0].value;
+  }
+  else {
+    chartHeader = "Distance";
+  };
+
+  dt.addEventListener('click', function() {
+    loadChart(chartHeader, dt.value);
+  });
 };
 
 function deleteTableRow(rowid) {
@@ -117,15 +144,9 @@ function deleteTableRow(rowid) {
 
 };
 
-function loadChart(chartHeader = "Distance") {
+function loadChart(chartHeader = "Distance", date = new Date()) {
 
-  var xyValues = [
-    { x: 50, y: 7 },
-    { x: 60, y: 8 },
-    { x: 70, y: 8 },
-    { x: 80, y: 9 },
-    { x: 90, y: 9 }
-  ];
+  let xyValues = getChartData(chartHeader, date); 
 
   let ctx = document.getElementById("myChartId").getContext("2d");
   // rdestroy previous chart if created before re-creating
@@ -152,7 +173,32 @@ function loadChart(chartHeader = "Distance") {
   });
 };
 
-function getChartData() {
+function getChartData(chartHeader, date) {
+
+  return [
+    { x: 50, y: 7 },
+    { x: 60, y: 8 },
+    { x: 70, y: 8 },
+    { x: 80, y: 9 },
+    { x: 90, y: 9 }
+  ];
+
+  let httpreq = new XMLHttpRequest();
+
+  httpreq.open("GET", "/api/compare", true);
+  httpreq.setRequestHeader("Content-Type", "application/json");
+  
+  let params = {
+    "chartType": chartHeader,
+    "date": date,
+  };
+  httpreq.send(JSON.stringify(params));
+  httpreq.onreadystatechange = function() {
+      if (httpreq.readyState === XMLHttpRequest.DONE && httpreq.status === 200) {
+        // TODO: decide if we need it
+      }
+    };
+  httpreq.send();
 
 };
 
@@ -168,6 +214,7 @@ const router = (event) => {
       break
     case "/compare":
       registerMeasurementSwitcherChart();
+      registerCompareDateSwitcher();
       loadChart();
       break
     case "/settings":

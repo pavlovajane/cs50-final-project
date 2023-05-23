@@ -60,6 +60,7 @@ def delete_run(runid):
 def compare_runs():
 
     if request.method == "POST":
+        
         data = request.form
         queryruns = """
         SELECT 

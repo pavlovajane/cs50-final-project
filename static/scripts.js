@@ -175,31 +175,26 @@ function loadChart(chartHeader = "Distance", date = new Date()) {
 
 function getChartData(chartHeader, date) {
 
-  return [
-    { x: 50, y: 7, main: 1 },
-    { x: 60, y: 8 },
-    { x: 70, y: 8 },
-    { x: 80, y: 9 },
-    { x: 90, y: 9 }
-  ];
-
   let httpreq = new XMLHttpRequest();
 
-  httpreq.open("GET", "/api/compare", true);
+  httpreq.open("POST", "/api/compare", false);
   httpreq.setRequestHeader("Content-Type", "application/json");
   
   let params = {
     "chartType": chartHeader,
     "date": date,
   };
-  httpreq.send(JSON.stringify(params));
+  
   httpreq.onreadystatechange = function() {
       if (httpreq.readyState === XMLHttpRequest.DONE && httpreq.status === 200) {
-        // TODO: decide if we need it
-      }
+        result = httpreq.responseText;
+        console.log(result)
+       }
     };
-  httpreq.send();
+  httpreq.send(JSON.stringify(params));
 
+  return JSON.parse(result)
+  
 };
 
 const router = (event) => {

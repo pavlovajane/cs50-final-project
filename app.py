@@ -8,7 +8,7 @@ from datetime import date, datetime, timedelta
 
 # Internal imports
 from supportfunctions import handle_exception, login_required, check_passowrd_validity, get_user_runs, \
-    parse_weather, get_seconds, convert_to_date, get_user_settings, create_coordinates
+    parse_weather, get_seconds, convert_to_date, get_user_settings, create_coordinates, convert_to_dateiso
 
 # Configure application
 app = Flask(__name__)
@@ -61,7 +61,8 @@ def compare_runs():
 
     if request.method == "POST":
         
-        data = request.form
+        data = request.get_json()
+        
         queryruns = """
         SELECT 
         user_id as athlete,
@@ -72,13 +73,15 @@ def compare_runs():
         GROUP BY user_id, time
         """
         if data["chartType"]=="Speed":
-            query = query.replace("AVG(distance) as distance", "AVG(speed) as speed")
+            queryruns = queryruns.replace("AVG(distance) as distance", "AVG(speed) as speed")
 
         # calculate week from the date of the report chosen by user
         datereport = data["date"]
-        datestr = datetime.strptime(datereport, '%Y-%m-%d')
-        weekbefore = datestr - timedelta(days=7)
+        dateshort = convert_to_dateiso(datereport)
+        weekbefore = dateshort - timedelta(days=7)
+        # convert to YYYY-MM-DD start and end of the report for the user
         weekbefore = weekbefore.strftime('%Y-%m-%d')
+        datereport = dateshort.strftime('%Y-%m-%d')
 
         querymarath = """
         SELECT 
@@ -92,12 +95,12 @@ def compare_runs():
             querymarath = querymarath.replace("km4week as distance", "speed4week as speed")
             querymarath = querymarath.replace("ORDER BY distance","ORDER BY speed")
 
-        runs = g.crs.execute(queryruns, (session["user_id"],weekbefore,date,))
+        runs = g.crs.execute(queryruns, (session["user_id"], weekbefore, datereport,))
         userruns = runs.fetchone()
         comps = g.crs.execute(querymarath).fetchall()
         array_runs = create_coordinates(userruns, comps)
 
-        return array_runs
+        return jsonify(array_runs)
 
 @app.route("/compare", methods=["GET"])
 @login_required

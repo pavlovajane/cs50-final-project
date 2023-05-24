@@ -76,8 +76,13 @@ def compare_runs():
             queryruns = queryruns.replace("AVG(distance) as distance", "AVG(speed) as speed")
 
         # calculate week from the date of the report chosen by user
-        datereport = data["date"]
-        dateshort = convert_to_dateiso(datereport)
+        datereport = data["datereport"]
+        try:
+            dateshort = datetime.date.fromisoformat(datereport)
+            dateshort = convert_to_date(datereport)
+        except:
+            dateshort = convert_to_dateiso(datereport)
+    
         weekbefore = dateshort - timedelta(days=7)
         # convert to YYYY-MM-DD start and end of the report for the user
         weekbefore = weekbefore.strftime('%Y-%m-%d')

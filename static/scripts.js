@@ -111,16 +111,10 @@ const registerCompareDateSwitcher = () => {
    
   };
   
-  const xAxisNodes = document.getElementsByName("flexRadioCompare");
-  if (xAxisNodes.length !=0) {
-    chartHeader = xAxisNodes[0].value;
-  }
-  else {
-    chartHeader = "Distance";
-  };
+  let chartHeader = getMesaurmenetsValue();
 
-  dt.addEventListener('click', function() {
-    loadChart(chartHeader, dt.value);
+  dt.addEventListener('change', function() {
+    loadChart(chartHeader, this.value);
   });
 };
 
@@ -144,9 +138,21 @@ function deleteTableRow(rowid) {
 
 };
 
-function loadChart(chartHeader = "Distance", date = new Date()) {
+function loadChart(chartHeader = "Distance", datereport = new Date().toISOString()) {
 
-  let xyValues = getChartData(chartHeader, date); 
+  try {
+    datereport = new Date(datereport).toISOString();
+  } catch (error) {
+    datereport = new Date().toISOString()
+  }
+
+  let xyValues = getChartData(chartHeader, datereport); 
+  let measurement = ", km";
+  // TODO: check user settings - mi/kmh and adjust labels
+  chartHeader = getMesaurmenetsValue(chartHeader);
+  if (chartHeader == "Speed") {
+      measurement = ", kmh"
+  }
 
   let ctx = document.getElementById("myChartId").getContext("2d");
   // rdestroy previous chart if created before re-creating
@@ -156,24 +162,48 @@ function loadChart(chartHeader = "Distance", date = new Date()) {
   };
 
   myChart = new Chart(ctx, {
-    type: "scatter",
+    type: "bubble",
+    labels: xyValues,
     data: {
       datasets: [{
-        label: chartHeader,
-        pointRadius: 4,
-        pointBackgroundColor: "rgb(0,0,255)",
+        label: chartHeader + "/Time",
         data: xyValues
       }]
     },
     options: {
       legend: { display: false },
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: chartHeader + measurement
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: "Time, h"
+          }
+        }
+      },
       responsive: true,
       maintainAspectRatio: false
     }
   });
 };
 
-function getChartData(chartHeader, date) {
+function getMesaurmenetsValue() {
+    
+    const xAxisNodes = document.getElementsByName("flexRadioCompare");
+    
+    for (i = 0; i < xAxisNodes.length; i++) {
+      if (xAxisNodes[i].checked)
+          return header = xAxisNodes[i].value;
+    }
+  
+};
+
+function getChartData(chartHeader, datereport) {
 
   let httpreq = new XMLHttpRequest();
 
@@ -182,19 +212,31 @@ function getChartData(chartHeader, date) {
   
   let params = {
     "chartType": chartHeader,
-    "date": date,
+    "datereport": datereport,
   };
   
   httpreq.onreadystatechange = function() {
       if (httpreq.readyState === XMLHttpRequest.DONE && httpreq.status === 200) {
         result = httpreq.responseText;
-        console.log(result)
        }
     };
   httpreq.send(JSON.stringify(params));
 
   return JSON.parse(result)
   
+};
+
+function createPointsColorArray(dataObj){
+  let colorArray = [];
+  for (let i = 0; i < dataObj.length; i++) {
+    if (dataObj[i].hasOwnProperty("user") && dataObj[i]["user"]==1) {
+      // color red for users' value
+      colorArray.push("rgb(245, 162, 177)")
+    } else {
+      colorArray.push("rgb(54, 162, 235)")
+    };
+  };
+  return colorArray;
 };
 
 const router = (event) => {

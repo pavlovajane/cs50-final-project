@@ -183,6 +183,7 @@ def convert_to_date(datestr):
     return datetime.strptime(datestr, "%Y-%m-%d").date()
 
 def convert_to_dateiso(datelong):
+    print(datelong)
     return datetime.strptime(datelong, "%Y-%m-%dT%H:%M:%S.%fZ").date()
 
 def create_coordinates(runs, compruns):
@@ -195,35 +196,39 @@ def create_coordinates(runs, compruns):
         # we need to calculate projected time - AVG(t-1 + t+1)
         # projected time - average of marathoners times with smaller and
         # greater values
-        if i[1]>=runs[1] and not calculated:
-            if compruns.index(i)>1:
-                prev = compruns[compruns.index(i)-1][2]
-            else:
-                prev = 0
-            if len(compruns) >= (compruns.index(i)+1):
-                next = compruns[compruns.index(i)+1][2]
-            else:
-                next = i[2]
-            if not prev==0:               
-                projected_time = round((prev + next)/2,2)
-            else:
-                # if prev result is 0 - projected time is not average but remaining time
-                projected_time = next
-            calculated = True
+        if not (runs is None):
+            if i[1]>=runs[1] and not calculated:
+                if compruns.index(i)>1:
+                    prev = compruns[compruns.index(i)-1][2]
+                else:
+                    prev = 0
+                if len(compruns) >= (compruns.index(i)+1):
+                    next = compruns[compruns.index(i)+1][2]
+                else:
+                    next = i[2]
+                if not prev==0:               
+                    projected_time = round((prev + next)/2,2)
+                else:
+                    # if prev result is 0 - projected time is not average but remaining time
+                    projected_time = next
+                calculated = True
 
-            add_list_entry(array_runs, projected_time, runs[1], 1)
+                add_list_entry(array_runs, projected_time, runs[1], 15)
 
-        add_list_entry(array_runs, i[2], i[1])
+        add_list_entry(array_runs, i[2], i[1], 5)
+    if not (runs is None):
+        if not calculated and compruns.index(i) == (len(compruns)-1):
+            # users result is great than everything in a compruns
+            # add users result at the end of the array
+            add_list_entry(array_runs, i[2], runs[1], 15)
 
     return array_runs
 
-def add_list_entry(arr, time, dist_speed, user = 0):
+def add_list_entry(arr, time, dist_speed, radius):
     dictentry = {
                 "x": dist_speed,
-                "y": time
+                "y": time,
+                "r": radius
             }
-    
-    if user == 1:
-        dictentry["user"] = 1
     
     arr.append(dictentry)

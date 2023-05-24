@@ -176,7 +176,7 @@ function loadChart(chartHeader = "Distance", date = new Date()) {
 function getChartData(chartHeader, date) {
 
   return [
-    { x: 50, y: 7 },
+    { x: 50, y: 7, main: 1 },
     { x: 60, y: 8 },
     { x: 70, y: 8 },
     { x: 80, y: 9 },

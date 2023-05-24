@@ -8,7 +8,7 @@ from datetime import date, datetime, timedelta
 
 # Internal imports
 from supportfunctions import handle_exception, login_required, check_passowrd_validity, get_user_runs, \
-    parse_weather, get_seconds, convert_to_date, get_user_settings
+    parse_weather, get_seconds, convert_to_date, get_user_settings, create_coordinates
 
 # Configure application
 app = Flask(__name__)
@@ -35,11 +35,11 @@ def before_request():
 
 @app.after_request
 def after_request(response):
-    # close connection
+    # close db connection
     if g.db is not None:
         g.db.close()
 
-    """Ensure responses aren't cached"""
+    # Ensure responses aren't cached
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     response.headers["Expires"] = 0
     response.headers["Pragma"] = "no-cache"
@@ -48,7 +48,7 @@ def after_request(response):
 @app.route('/<int:runid>', methods=['DELETE'])
 @login_required
 def delete_run(runid):
-    """Delete a run by its id"""
+    # Delete a run by its id
     if request.method == "DELETE" and runid != None:
         # triggered row deletion
         g.crs.execute("DELETE FROM runs WHERE id = ?", (runid,))
@@ -92,9 +92,12 @@ def compare_runs():
             querymarath = querymarath.replace("km4week as distance", "speed4week as speed")
             querymarath = querymarath.replace("ORDER BY distance","ORDER BY speed")
 
-        g.crs.execute(queryruns, (session["user_id"],weekbefore,date,))
+        runs = g.crs.execute(queryruns, (session["user_id"],weekbefore,date,))
+        userruns = runs.fetchone()
+        comps = g.crs.execute(querymarath).fetchall()
+        array_runs = create_coordinates(userruns, comps)
 
-    return jsonify()
+        return array_runs
 
 @app.route("/compare", methods=["GET"])
 @login_required
@@ -105,7 +108,7 @@ def compare():
 @app.route("/", methods=["GET"])
 @login_required
 def index():
-    """Show runs done for logged in user"""
+    # Show runs done for logged in user
     runs = get_user_runs(session["user_id"], g.crs)
     today = date.today()
 
@@ -119,7 +122,6 @@ def index():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    """Log user in"""
 
     # Forget any user_id
     session.clear()
@@ -136,11 +138,11 @@ def login():
             return handle_exception("must provide password", 403)
 
         # Query database for user information
-        rows = g.crs.execute("SELECT id, username, imperial FROM users WHERE username = ?", (request.form.get("username"),))
+        rows = g.crs.execute("SELECT id, username, imperial, hash FROM users WHERE username = ?", (request.form.get("username"),))
         user = rows.fetchone()
 
         # Ensure username exists and password is correct
-        if user == None or not check_password_hash(user[2], request.form.get("password")):
+        if user == None or not check_password_hash(user[3], request.form.get("password")):
             return handle_exception("invalid username and/or password", 403)
 
         # Remember which user has logged in
@@ -157,7 +159,7 @@ def login():
 
 @app.route("/logout")
 def logout():
-    """Log user out"""
+    # Log user out
 
     # Forget any user_id
     session.clear()
@@ -192,7 +194,7 @@ def settings():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    """Register user"""
+    # Register user
     
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
@@ -224,7 +226,11 @@ def register():
             return handle_exception("Username is taken", 400)
 
         # Add user to the database
-        g.crs.execute("INSERT INTO users (username, hash) VALUES (?, ?)", (username, generate_password_hash(password),))
+        g.crs.execute("""
+        INSERT INTO users 
+        (username, hash) 
+        VALUES (?, ?)
+        """, (username, generate_password_hash(password),))
         g.db.commit()
 
         # Query database for username

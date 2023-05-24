@@ -181,3 +181,38 @@ def get_seconds(time_str):
 
 def convert_to_date(datestr):
     return datetime.strptime(datestr, "%Y-%m-%d").date()
+
+def create_coordinates(runs, compruns):
+    # create from sqlite query results sorted dictionary
+    array_runs = []
+    # compruns = [(id,distance,time),(id,distnace,time),()]
+    calculated = False
+    for i in compruns:
+        # if current distance/speed is more than users distance/speed
+        # we need to calculate projected time - AVG(t-1 + t+1)
+        # projected time - average of marathoners times with smaller and
+        # greater values
+        if i[1]>=runs[0][1] and not calculated:
+            if compruns.index(i)>1:
+                prev = compruns[compruns.index(i)-1][2]
+            else:
+                prev = 0
+            if len(compruns) >= (compruns.index(i)+1):
+                next = compruns[compruns.index(i)+1][2]
+            else:
+                next = i[2]
+            projected_time = round((prev + next)/2,2)
+            calculated = True
+
+            dict = {
+                "x": projected_time,
+                "y": runs[0][1],
+                "user": 1
+            }
+            array_runs.append(dict)
+            dictnext = {
+                "x": i[2],
+                "y": i[1]
+            }
+
+    return array_runs

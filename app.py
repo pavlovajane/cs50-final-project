@@ -4,11 +4,12 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 import requests
-from datetime import date, datetime, timedelta
+from datetime import date
 
 # Internal imports
 from supportfunctions import handle_exception, login_required, check_passowrd_validity, get_user_runs, \
-    parse_weather, get_seconds, convert_to_date, get_user_settings, create_coordinates, convert_to_dateiso
+    parse_weather, get_seconds, convert_to_date, get_user_settings, create_coordinates, calculate_start_date, \
+    convert_to_strdate, convert_to_datestr
 
 # Configure application
 app = Flask(__name__)
@@ -66,38 +67,29 @@ def compare_runs():
         queryruns = """
         SELECT 
         user_id as athlete,
-        AVG(distance) as distance,
-        0 as time
+        AVG(distance) as distance
         FROM runs 
         WHERE user_id = ? AND (rundate >= ? AND rundate <= ?) 
-        GROUP BY user_id, time
+        GROUP BY user_id
         """
         
         if data["chartType"]=="Speed":
             # if speed requested - replace distance with speed in the query
-            queryruns = queryruns.replace("AVG(distance) as distance", "AVG(speed) as speed")
+            queryruns = queryruns.replace("AVG(distance)", "AVG(speed)")
 
         if session["imperial"]==1 and data["chartType"]=="Speed":
             # replace speed kmh (default) by mph
-            queryruns = queryruns.replace("","")
+            queryruns = queryruns.replace("AVG(speed)","AVG(ROUND(speed/1.609,2))")
         elif session["imperial"]==1 and data["chartType"]=="Distance":
             # replace km (default) by miles
-            queryruns = queryruns.replace("","")
+            queryruns = queryruns.replace("AVG(distance)","AVG(ROUND(distance/1.609,2))")
         
-
-
-        # calculate week from the date of the report chosen by user
-        datereport = data["datereport"]
-        try:
-            dateshort = datetime.date.fromisoformat(datereport)
-            dateshort = convert_to_date(datereport)
-        except:
-            dateshort = convert_to_dateiso(datereport)
-    
-        weekbefore = dateshort - timedelta(days=7)
-        # convert to YYYY-MM-DD start and end of the report for the user
-        weekbefore = weekbefore.strftime('%Y-%m-%d')
-        datereport = dateshort.strftime('%Y-%m-%d')
+        # convert to ISO date for calculations
+        datereport = convert_to_datestr(data["datereport"])
+        # calculate week from date
+        weekbefore = calculate_start_date(datereport)
+        # convert date into string to use in the query
+        datereport = convert_to_strdate(datereport)
 
         querymarath = """
         SELECT 
@@ -110,6 +102,13 @@ def compare_runs():
         if data["chartType"]=="Speed":
             querymarath = querymarath.replace("km4week as distance", "speed4week as speed")
             querymarath = querymarath.replace("ORDER BY distance","ORDER BY speed")
+
+        if session["imperial"]==1 and data["chartType"]=="Speed":
+            # replace speed kmh (default) by mph
+            querymarath = querymarath.replace("speed4week as speed","ROUND(speed4week/1.609,2) as speed")
+        elif session["imperial"]==1 and data["chartType"]=="Distance":
+            # replace km (default) by miles
+            querymarath = querymarath.replace("km4week as distance","ROUND(km4week/1.609,2) as distance")
 
         runs = g.crs.execute(queryruns, (session["user_id"], weekbefore, datereport,))
         userruns = runs.fetchone()

@@ -1,7 +1,7 @@
 import os
 import requests
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from flask import redirect, render_template, request, session
 from functools import wraps
@@ -20,7 +20,6 @@ def handle_exception(message, code=400):
             s = s.replace(old, new)
         return s
     return render_template("apology.html", top=code, bottom=escape(message)), code
-
 
 def login_required(f):
     """
@@ -159,7 +158,6 @@ def get_user_settings(userid, db):
     imperial = units.fetchone()
     return False if imperial is None else (True if imperial[0]==1 else False)
 
-
 def convert_to_mph(kmh):
     return kmh/1.609
 
@@ -183,9 +181,29 @@ def convert_to_date(datestr):
     return datetime.strptime(datestr, "%Y-%m-%d").date()
 
 def convert_to_dateiso(datelong):
-    print(datelong)
     return datetime.strptime(datelong, "%Y-%m-%dT%H:%M:%S.%fZ").date()
 
+def convert_to_datestr(datestr):
+
+    try:
+        dateshort = datetime.date.fromisoformat(datestr)
+        dateshort = convert_to_date(datestr)
+    except:
+        dateshort = convert_to_dateiso(datestr)
+
+    return dateshort
+
+def convert_to_strdate(dateshort):
+    
+    # calculate week from the date of the report chosen by user
+    return dateshort.strftime('%Y-%m-%d')
+
+def calculate_start_date(datereport):
+   
+    weekbefore = datereport - timedelta(days=7)
+    # convert to YYYY-MM-DD start and end of the report for the user
+    return weekbefore.strftime('%Y-%m-%d')
+    
 def create_coordinates(runs, compruns):
     # create from sqlite query results sorted dictionary
     array_runs = []
@@ -202,8 +220,8 @@ def create_coordinates(runs, compruns):
                     prev = compruns[compruns.index(i)-1][2]
                 else:
                     prev = 0
-                if len(compruns) >= (compruns.index(i)+1):
-                    next = compruns[compruns.index(i)+1][2]
+                if len(compruns) >= (compruns.index(i)):
+                    next = compruns[compruns.index(i)][2]
                 else:
                     next = i[2]
                 if not prev==0:               

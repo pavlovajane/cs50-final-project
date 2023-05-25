@@ -83,13 +83,14 @@ const registerMeasurementSwitcher = () => {
 const registerMeasurementSwitcherChart = () => {
   
   const xAxisNodes = document.getElementsByName("flexRadioCompare");
+  const dt = document.getElementById("datecompare");
 
   for (let i = 0; i < xAxisNodes.length; i++) {
     let item = xAxisNodes[i];
     item.addEventListener('click', function() {
   
           chartHeader = item.value;
-          loadChart(chartHeader);
+          loadChart(chartHeader, dt.value);
 
       });
   };
@@ -104,11 +105,13 @@ const registerCompareDateSwitcher = () => {
     date = new Date();
     
     // format current date to YYYY-MM-DD
+
     let dateFormat = date.getFullYear() + "-" +((date.getMonth()+1).toString().length != 2 ? "0" 
     + (date.getMonth() + 1) : (date.getMonth()+1)) + "-" + (date.getDate().toString().length != 2 ?"0" 
     + date.getDate() : date.getDate());
+
     dt.value = dateFormat;
-   
+  
   };
   
   let chartHeader = getMesaurmenetsValue();
@@ -140,19 +143,15 @@ function deleteTableRow(rowid) {
 
 function loadChart(chartHeader = "Distance", datereport = new Date().toISOString()) {
 
-  try {
-    datereport = new Date(datereport).toISOString();
-  } catch (error) {
-    datereport = new Date().toISOString()
-  }
-
+  // convert date to ISO format it is in YYYY-MM-DD
+  datereport = convert_to_iso_date(datereport);
+  // set chosen type of chart - distance/speed
+  chartHeader = getChartHeader();
+  // set axis labels - based on if user uses imperial/metric values
+  let measurement = getMesaurmenetsValue(chartHeader);
+  
+  // get data for the chart
   let xyValues = getChartData(chartHeader, datereport); 
-  let measurement = ", km";
-  // TODO: check user settings - mi/kmh and adjust labels
-  chartHeader = getMesaurmenetsValue(chartHeader);
-  if (chartHeader == "Speed") {
-      measurement = ", kmh"
-  }
 
   let ctx = document.getElementById("myChartId").getContext("2d");
   // rdestroy previous chart if created before re-creating
@@ -192,7 +191,32 @@ function loadChart(chartHeader = "Distance", datereport = new Date().toISOString
   });
 };
 
-function getMesaurmenetsValue() {
+function returnImperial() {
+  // return settings of the user imperial = 1/0 received from backend
+  return imperial==1 ? true : false;
+};
+
+function convert_to_iso_date(datecheck) {
+  // conver date from YYYY-MM-DD to ISO strin format
+  return new Date(datecheck).toISOString();
+
+};
+
+function getMesaurmenetsValue(chartHeader, measurement = ", kmh") {
+  if (chartHeader == "Speed") {
+    if (returnImperial()) {
+      measurement = ", mph";
+    } else { measurement = ", kmh" };
+  }
+  else {
+    if (returnImperial()) {
+      measurement = ", mi";
+    } else { measurement = ", km" };
+  };
+  return measurement
+}
+
+function getChartHeader(header = "Distance") {
     
     const xAxisNodes = document.getElementsByName("flexRadioCompare");
     
@@ -200,6 +224,8 @@ function getMesaurmenetsValue() {
       if (xAxisNodes[i].checked)
           return header = xAxisNodes[i].value;
     }
+
+    return header
   
 };
 

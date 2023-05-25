@@ -72,8 +72,19 @@ def compare_runs():
         WHERE user_id = ? AND (rundate >= ? AND rundate <= ?) 
         GROUP BY user_id, time
         """
+        
         if data["chartType"]=="Speed":
+            # if speed requested - replace distance with speed in the query
             queryruns = queryruns.replace("AVG(distance) as distance", "AVG(speed) as speed")
+
+        if session["imperial"]==1 and data["chartType"]=="Speed":
+            # replace speed kmh (default) by mph
+            queryruns = queryruns.replace("","")
+        elif session["imperial"]==1 and data["chartType"]=="Distance":
+            # replace km (default) by miles
+            queryruns = queryruns.replace("","")
+        
+
 
         # calculate week from the date of the report chosen by user
         datereport = data["datereport"]
@@ -111,7 +122,7 @@ def compare_runs():
 @login_required
 def compare():
 
-    return render_template("compare.html")
+    return render_template("compare.html", imperial = session["imperial"])
 
 @app.route("/", methods=["GET"])
 @login_required

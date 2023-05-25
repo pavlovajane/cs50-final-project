@@ -6,6 +6,12 @@ Compare your runs
 
 {% block main %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- <script type="text/javascript" src={{ url_for('static', filename='scripts.js') }}></script> -->
+<script type="text/javascript">
+    console.log("Here body");
+    const imperial = JSON.parse("{{ imperial|tojson }}");
+</script>
+
 <div class="chart">
     <h1>Comparison with marathoners' data</h1>
     <div class="checkcompare">

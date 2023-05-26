@@ -165,7 +165,7 @@ function loadChart(chartHeader = "Distance", datereport = new Date().toISOString
     labels: xyValues,
     data: {
       datasets: [{
-        label: chartHeader + "/Time",
+        label: chartHeader + ", Time",
         data: xyValues
       }]
     },

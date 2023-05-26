@@ -21,6 +21,7 @@
     2. User is notified in real-time if their password is aligned with the rules
   * Logged in user's name is shown on the right of the menu
     1. If a user isn't logged in, they can't access any functionality except for login and registration
+    2. If wrong user name or password are given - the app will show a confused penguin with clarification what went wrong
   * User can choose their default metrics settings - imperial (mi, mph, Fahrenheit) or metric (km, kmh, Celsius)
     1. Settings will be saved for future use
     2. Settings are shown near logged user's name
@@ -30,8 +31,15 @@
   auto-complete from the google places database
     1. If the user added a place of a run (see above) - weather API will be triggered to receive the maximum temperature for the date of the run and precipitation for the day of the run
     2. User can enter a run for a future date. The system will make a record and load forecast for the record (if a place is entered). The future date runs will be highlighted in pink in a runs table to indicate possible faulty data to the user
+    3. User can choose between adding the run distance in miles or in kilometers. By default the switcher is aligned with user's settings
   * User can delete any previously recorded run on the main page. The system will ask to confirm the deletion
-  
+  * Compare shows user's results for 7 weeks before given date on a scatter chart with athletes from Prague's marathon
+    1. By default the date is set to current date
+    2. The report will check for results from previous 7 days
+    3. The date of the report can be changed to any date by date picker
+    4. User's results are represented as a slighlty bigger dot
+    5. If user has no results for the given date or 7 days before - no bigger dot will be visible
+    6. The chart will show the exact data on hover - (distance/speed, time, dot size - misc.)  
 
 ##### Design choices and details
   * Flask is chosen as a back-end framework. File structure follows Flask's standard structure:

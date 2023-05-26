@@ -15,7 +15,7 @@
 
  Check if you are falling behind most of the runners and adjust your training routine accordingly. Celebrate success if you have a good projected time and keep going!
 
-###### Features
+##### Features
   * Users can register using their name and specifying their password
     1. Password is evaluated towards certain rules (e.g. number of symbols, special characters etc.)
     2. User is notified in real-time if their password is aligned with the rules
@@ -33,7 +33,7 @@
   * User can delete any previously recorded run on the main page. The system will ask to confirm the deletion
   
 
-###### Design choices and details
+##### Design choices and details
   * Flask is chosen as a back-end framework. File structure follows Flask's standard structure:
     1. All HTML templates (with Jinja expressions) located in templates
     2. CSS, Javascript, and favicon picture are located in static/
@@ -45,7 +45,7 @@
   * requirements.txt has package details for dependencies
   * I had an idea to create it pure command-line (with [ASCII art](https://en.wikipedia.org/wiki/ASCII_art) and stuff) as I tend to focus on back-end development. But I decided I give front-end a go too, I always was supportive of T-shape idea. So here we are - Python - 48.9%, HTML - 29.0%, JavaScript - 16.1%, CSS - 6.0% 
   
-###### Future developments
+##### Future developments/ next releases
   * Improved authorization - e.g. via social platforms 
   * Register by e-mail instead of name with e-mail validation
   * More security of user's account - e.g. password restoration and change

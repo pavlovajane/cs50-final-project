@@ -25,8 +25,4 @@ CREATE TABLE IF NOT EXISTS marathoners (
     performancecategory CHARACTER(1)
 );
 
-CREATE VIEW IF NOT EXISTS 4weeks (
--- TBD view to calculate 4week results per user_id to compare with marathoners
-);
-
 CREATE INDEX user_id ON runs(user_id);

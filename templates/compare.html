@@ -11,9 +11,18 @@ Compare your runs
     console.log("Here body");
     const imperial = JSON.parse("{{ imperial|tojson }}");
 </script>
-
-<div class="chart">
+{% if show_chart == True %}
+<div class="chart">   
     <h1>Comparison with marathoners' data</h1>
+    <div class="chart-block-text">
+        <div class="chart-legend">Your projected time is represented as a bigger circle. Other circles are athletes' results from the dataset. 
+            See link to <a
+            href="https://www.kaggle.com/datasets/girardi69/marathon-time-predictions" target="_blank" rel="noopener noreferrer"> Kaggle</a></div>
+        <div class="chart-legend">Your projected time: marathoner's distance/speed &gt= AVG(your 7 days results(distance/speed) &lt= 
+            marathoner's distance/speed). E.g. you run 100km in the last 7 days. One athlete run 90km in the last 7 days and
+            did marathon in 3.5h, another athlete run 105km and did marathon in 4h. Your projected time - 3.75h.
+        </div> 
+    </div>
     <div class="checkcompare">
         <div class="datecompareblock">
             <div>
@@ -40,4 +49,8 @@ Compare your runs
         <canvas id="myChartId"></canvas>
     </div>  
 </div>
+{% else %}
+    <h1>Your runs comparison here</h1>
+    <h2>No runs yet tracked, stay put!</h2>
+{% endif %}
 {% endblock %}

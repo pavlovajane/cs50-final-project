@@ -1,6 +1,6 @@
 # initialize and load data into marathon runs table from MarathonData.csv
 
-import csv, sqlite3, sys, os
+import csv, sqlite3, sys
 
 with open("MarathonData.csv") as csvfile:
     # connect to the database

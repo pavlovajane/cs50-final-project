@@ -120,8 +120,16 @@ def compare_runs():
 @app.route("/compare", methods=["GET"])
 @login_required
 def compare():
+    
+    # check if any runs tracked - if not - don't show the compare chart
+    runs = get_user_runs(session["user_id"], g.crs)
 
-    return render_template("compare.html", imperial = session["imperial"])
+    show_chart = False
+    if len(runs) != 0:
+        # Runs are found/tracked
+        show_chart = True
+
+    return render_template("compare.html", show_chart = show_chart, imperial = session["imperial"])
 
 @app.route("/", methods=["GET"])
 @login_required

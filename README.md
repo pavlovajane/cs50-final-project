@@ -26,10 +26,11 @@
     2. Settings are shown near logged user's name
     3. Settings are applied to recalculate all values on the fly (temperature, distance, and speed)
     4. Settings are shown in the table headers for runs and axis labels for the runs compare chart
-  * Add run functionality enriched with google places API - user can start typing the place of run and it will
+  * Add run functionality enriched with the google places API - user can start typing the place of run and it will
   auto-complete from the google places database
     1. If the user added a place of a run (see above) - weather API will be triggered to receive the maximum temperature for the date of the run and precipitation for the day of the run
     2. User can enter a run for a future date. The system will make a record and load forecast for the record (if a place is entered). The future date runs will be highlighted in pink in a runs table to indicate possible faulty data to the user
+  * User can delete any previously recorded run on the main page. The system will ask to confirm the deletion
   
 
 ###### Design choices and details
@@ -42,6 +43,7 @@
     2. supportfunctions.py has supplemental logic like converting strings to date, dates to different formats, building chart array data, and similar
     3. initialize.py has logic for creating a database (disclaimer) - it was already created and data from CSV loaded. But steps could be reproduced from scratch using initialize.py. Marathon data was downloaded from Kaggle and saved in MarathonData.csv 
   * requirements.txt has package details for dependencies
+  * I had an idea to create it pure command-line (with [ASCII art](https://en.wikipedia.org/wiki/ASCII_art) and stuff) as I tend to focus on back-end development. But I decided I give front-end a go too, I always was supportive of T-shape idea. So here we are - Python - 48.9%, HTML - 29.0%, JavaScript - 16.1%, CSS - 6.0% 
   
 ###### Future developments
   * Improved authorization - e.g. via social platforms 

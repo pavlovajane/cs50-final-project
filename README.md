@@ -35,11 +35,11 @@
 
 ##### Design choices and details
   * Flask is chosen as a back-end framework. File structure follows Flask's standard structure:
-    1. All HTML templates (with Jinja expressions) located in templates
+    1. All HTML templates (with Jinja expressions) located in templates/
     2. CSS, Javascript, and favicon picture are located in static/
     3. Database.sql file has queries (some) used in code to extract data
   * Pyhton files are app.py, supportfunctions.py and initialize.py
-    1. app.py has the main logic, routing to templates
+    1. app.py has the main logic, routing to diffrernt template HTMLs
     2. supportfunctions.py has supplemental logic like converting strings to date, dates to different formats, building chart array data, and similar
     3. initialize.py has logic for creating a database (disclaimer) - it was already created and data from CSV loaded. But steps could be reproduced from scratch using initialize.py. Marathon data was downloaded from Kaggle and saved in MarathonData.csv 
   * requirements.txt has package details for dependencies
